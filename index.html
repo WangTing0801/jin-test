@@ -7,7 +7,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
     </script>
-   <script src="https://cloudbase.tencentcloud.com/assets/cloudbase-js-sdk/1.7.0/cloudbase.full.js"></script>
+ <script src="https://static.cloudbase.net/cloudbase-js-sdk/2.8.0/cloudbase.full.js">
+</script>
     <style>
         /* ===== 导入柔和字体 ===== */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&display=swap');
@@ -844,7 +845,8 @@
         try {
             if (typeof cloudbase !== 'undefined' && cloudbase.init) {
                 const app = cloudbase.init({
-                    env: 'jin-personality-d0fxwmgc4c28cd06'
+                    env: 'jin-personality-d0fxwmgc4c28cd06',
+                     region: 'ap-shanghai'  // 加上地域
                 });
                 db = app.database();
                 cloudReady = true;
