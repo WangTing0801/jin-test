@@ -7,8 +7,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
     </script>
-    <script src="https://imgcache.qq.com/qcloud/cloudbase-js-sdk/1.7.0/cloudbase.full.js">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@cloudbase/js-sdk@1.7.0/dist/cloudbase.full.js"></script>
 
     <style>
         /* ===== 导入柔和字体 ===== */
@@ -654,7 +653,7 @@
         <div id="progressArea" class="hidden">
             <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
             <div class="progress-label">
-                <span>🚢 已航行 <span class="highlight" id="progressText">0</span> / 30公里</span>
+                <span>🚢 已航行 <span class="highlight" id="progressText">0</span> / 30海里</span>
                 <span id="progressPercent">0%</span>
             </div>
         </div>
@@ -846,7 +845,7 @@
         try {
             if (typeof cloudbase !== 'undefined' && cloudbase.init) {
                 const app = cloudbase.init({
-                    env: 'jin-personality-d0fxwmg4c28cd06'
+                    env: 'jin-personality-d0fxwmgc4c28cd06'
                 });
                 db = app.database();
                 cloudReady = true;
@@ -870,12 +869,12 @@
             { q: "去名流茶馆听相声，你更享受哪种状态？", dim: 0, a: "台下眯着眼，品味捧逗门道", b: "台下扯嗓子喊\"吁~\"，跟着起哄" },
             { q: "新搬到一个天津老小区，你会？", dim: 0, a: "先观察几天，不主动打招呼", b: "当天就把对门楼上楼下混熟" },
             { q: "你心中\"天津卫的老例儿\"，最重要的是？", dim: 1, a: "嘛事儿都讲先来后到，加塞儿不行", b: "人与人得讲面儿，得饶人处且饶人" },
-            { q: "哥们儿借了钱到约定日期没还，你会？", dim: 1, a: "直接开口提醒，亲兄弟明算账", b: "抹不开面儿，暗示两句，不还就当随份子" },
+            { q: "好朋友借了钱到约定日期没还，你会？", dim: 1, a: "直接开口提醒，亲兄弟明算账", b: "抹不开面儿，暗示两句，不还就当随份子" },
             { q: "玩剧本杀或密室逃脱，你是哪种玩家？", dim: 1, a: "严格遵循线索逻辑，推理严密", b: "看气氛，为了大家体验好，偶尔放水" },
             { q: "看待去年\"天津大爷跳水\"，你更欣赏哪一点？", dim: 1, a: "自发形成的民间秩序，有人维持", b: "那种不在乎眼光、活出自我的热烈" },
             { q: "买煎饼果子看到熟客忘带钱，摊主说\"下次再说\"，你想？", dim: 1, a: "摊主不合适，小本买卖没规矩亏本", b: "摊主真局气！天津人就得有人情味儿" },
             { q: "单位评选优秀员工，你更倾向哪种方式？", dim: 1, a: "严格按KPI数据，谁分高谁上", b: "轮流坐庄，或看谁人缘好帮大家多" },
-            { q: "早高峰开车南京路，旁边车强行并道不打灯，你会？", dim: 1, a: "按喇叭寸步不让，你违规你怕嘛", b: "点一脚刹车让他进，多一事不如少一事" },
+            { q: "早高峰开车南京路，旁边车强行并道不打灯，你会？", dim: 1, a: "按喇叭寸步不让，TA违规了你怕嘛", b: "点一脚刹车让他进，多一事不如少一事" },
             { q: "提到\"杨柳青年画\"，你更喜欢哪种风格？", dim: 2, a: "工笔细腻、胖娃娃抱鲤鱼写实款", b: "色彩大胆、构图奇巧的抽象创新款" },
             { q: "下班后的独处时光，你更愿意？", dim: 2, a: "钻研新菜谱，或修理坏掉的小电器", b: "看科幻电影，或琢磨天马行空的点子" },
             { q: "听别人给你讲大道理，你更看重？", dim: 2, a: "内容有无数据支撑，能否落地", b: "角度是否新颖，有无打开新思路" },
