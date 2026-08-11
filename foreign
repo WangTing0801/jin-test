@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>Discover Your Tianjin Character · 留学生版</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
+    </script>
+    <script src="https://static.cloudbase.net/cloudbase-js-sdk/2.8.0/cloudbase.full.js">
+    </script>
+
+    <style>
+        /* ===== 导入字体 ===== */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&family=Inter:wght@400;500;600;700;800&display=swap');
+
+        /* ===== 基础样式 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Noto Sans SC', 'Inter', -apple-system, "PingFang SC", sans-serif;
+            background: #faf8f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 16px;
+            background-image: radial-gradient(circle at 20% 30%, rgba(192, 57, 43, 0.03) 0%, transparent 60%),
+                radial-gradient(circle at 80% 70%, rgba(192, 57, 43, 0.04) 0%, transparent 50%);
+        }
+        .container {
+            max-width: 440px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 36px;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.06), 0 8px 32px rgba(0, 0, 0, 0.03);
+            padding: 32px 28px 28px;
+            min-height: 500px;
+            position: relative;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* ===== 语言切换开关 ===== */
+        .lang-switch {
+            text-align: right;
+            margin-bottom: 8px;
+        }
+        .lang-switch .lang-btn {
+            background: #f0ede8;
+            border: none;
+            border-radius: 30px;
+            padding: 4px 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.25s ease;
+        }
+        .lang-switch .lang-btn .toggle-track {
+            width: 44px;
+            height: 24px;
+            background: #c0392b;
+            border-radius: 30px;
+            position: relative;
+            transition: all 0.3s ease;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+        .lang-switch .lang-btn .toggle-track .toggle-thumb {
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+        }
+        .lang-switch .lang-btn .toggle-track.en {
+            background: #2c3e50;
+        }
+        .lang-switch .lang-btn .toggle-track.en .toggle-thumb {
+            left: 23px;
+        }
+        .lang-switch .lang-btn .lang-label {
+            padding: 0 4px;
+            color: #1a1a2e;
+            font-weight: 500;
+            min-width: 28px;
+        }
+        .lang-switch .lang-btn .lang-label.active {
+            color: #c0392b;
+            font-weight: 700;
+        }
+
+        /* 返回首页链接 */
+        .back-home {
+            text-align: left;
+            margin-bottom: 6px;
+        }
+        .back-home a {
+            color: #8e8e93;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .back-home a:hover {
+            color: #c0392b;
+        }
+
+        /* ===== 头部 ===== */
+        h1 {
+            font-size: 28px;
+            font-weight: 900;
+            color: #1a1a2e;
+            letter-spacing: 1px;
+            margin-top: 6px;
+            line-height: 1.2;
+        }
+        h1 .highlight {
+            color: #c0392b;
+        }
+        .subtitle {
+            color: #8e8e93;
+            font-size: 14px;
+            margin: 4px 0 20px 0;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #f0ede8;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== 信息收集页 ===== */
+        .info-box {
+            padding: 4px 0;
+        }
+        .info-box .q-text {
+            font-size: 20px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #1a1a2e;
+        }
+        .info-box .q-text small {
+            display: block;
+            font-size: 14px;
+            font-weight: 400;
+            color: #8e8e93;
+            margin-top: 4px;
+        }
+        .info-box select,
+        .info-box input {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 16px;
+            border: 2px solid #edebe7;
+            font-size: 16px;
+            background: #faf8f5;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
+            font-family: inherit;
+            appearance: auto;
+            color: #1a1a2e;
+        }
+        .info-box select:focus,
+        .info-box input:focus {
+            outline: none;
+            border-color: #c0392b;
+            box-shadow: 0 0 0 4px rgba(192, 57, 43, 0.08);
+        }
+        .info-box .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 8px;
+        }
+        .info-box .field-group .field-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 2px;
+        }
+        .info-box .field-group .field-label .required {
+            color: #c0392b;
+            margin-left: 2px;
+        }
+
+        /* ===== 进度条 ===== */
+        .progress-wrap {
+            background: #f0ede8;
+            height: 6px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            background: #c0392b;
+            height: 100%;
+            width: 0%;
+            border-radius: 12px;
+            transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #8e8e93;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+        .progress-label .highlight {
+            color: #c0392b;
+            font-weight: 600;
+        }
+
+        /* ===== 题目区 ===== */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0.5;
+                transform: translateY(8px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .q-number {
+            font-size: 13px;
+            color: #8e8e93;
+            font-weight: 500;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+        .q-text {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a2e;
+            line-height: 1.6;
+            margin-bottom: 22px;
+            min-height: 60px;
+            transition: opacity 0.2s ease;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .option {
+            background: #f8f6f2;
+            border: 2px solid transparent;
+            border-radius: 18px;
+            padding: 16px 20px;
+            font-size: 16px;
+            color: #1a1a2e;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            line-height: 1.5;
+            position: relative;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .option .opt-label {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #edeae4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #8e8e93;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        .option .opt-text {
+            flex: 1;
+        }
+        .option:active {
+            transform: scale(0.97);
+        }
+        .option.selected {
+            background: #fdf6f3;
+            border-color: #c0392b;
+        }
+        .option.selected .opt-label {
+            background: #c0392b;
+            color: white;
+        }
+        .option.selected .opt-text {
+            color: #c0392b;
+            font-weight: 500;
+        }
+
+        /* ===== 按钮 ===== */
+        .btn {
+            padding: 14px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            letter-spacing: 0.5px;
+            text-align: center;
+            flex: 1;
+            font-family: inherit;
+        }
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        .btn:active:not(:disabled) {
+            transform: scale(0.96);
+        }
+        .btn-primary {
+            background: #c0392b;
+            color: white;
+            box-shadow: 0 4px 16px rgba(192, 57, 43, 0.25);
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: #a93226;
+            box-shadow: 0 6px 24px rgba(192, 57, 43, 0.3);
+        }
+        .btn-secondary {
+            background: #f0ede8;
+            color: #1a1a2e;
+        }
+        .btn-secondary:hover:not(:disabled) {
+            background: #e5e1da;
+        }
+        .btn-back {
+            background: transparent;
+            color: #8e8e93;
+            flex: 0 0 auto;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .btn-back:hover:not(:disabled) {
+            color: #1a1a2e;
+            background: #f5f2ed;
+            border-radius: 40px;
+        }
+        .w-full {
+            width: 100%;
+        }
+        .mt-10 {
+            margin-top: 10px;
+        }
+        .flex-center {
+            display: flex;
+            justify-content: center;
+        }
+
+        /* ===== 结果页 ===== */
+        .result-box {
+            text-align: center;
+            padding: 4px 0;
+        }
+        .result-art {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 8px 0 14px;
+        }
+        .result-art .char-area {
+            width: 100px;
+            height: 120px;
+            background: #fdf6f3;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+            font-weight: 900;
+            color: #c0392b;
+            border: 2px solid #f0ede8;
+        }
+        .result-art .landmark-area {
+            width: 100px;
+            height: 120px;
+            background: #f8f6f2;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            color: #8e8e93;
+            border: 2px solid #f0ede8;
+            flex-direction: column;
+            text-align: center;
+            line-height: 1.5;
+        }
+        @media (max-width: 400px) {
+            .result-art .char-area {
+                width: 80px;
+                height: 100px;
+                font-size: 48px;
+            }
+            .result-art .landmark-area {
+                width: 80px;
+                height: 100px;
+                font-size: 12px;
+            }
+        }
+        .result-badge {
+            display: inline-block;
+            background: #fdebd0;
+            color: #c0392b;
+            font-size: 13px;
+            padding: 4px 16px;
+            border-radius: 40px;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .result-char {
+            font-size: 38px;
+            font-weight: 900;
+            color: #c0392b;
+            line-height: 1.2;
+        }
+        .result-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 6px;
+        }
+        .result-desc {
+            color: #4a4a50;
+            line-height: 1.9;
+            font-size: 15px;
+            text-align: left;
+            padding: 0 4px;
+        }
+
+        /* ===== 匹配度进度条 ===== */
+        .match-section {
+            margin-top: 16px;
+            padding: 16px 18px;
+            background: #f8f6f2;
+            border-radius: 18px;
+            text-align: left;
+        }
+        .match-section .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .match-section .match-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #1a1a2e;
+        }
+        .match-section .match-label span {
+            color: #c0392b;
+            font-weight: 700;
+        }
+        .match-section .match-number {
+            font-size: 22px;
+            font-weight: 800;
+            color: #c0392b;
+        }
+        .match-bar-wrap {
+            width: 100%;
+            height: 8px;
+            background: #edeae4;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+        .match-bar-fill {
+            height: 100%;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #f5b7a6, #c0392b);
+            width: 0%;
+            transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .match-bar-fill.high {
+            background: linear-gradient(90deg, #c0392b, #e74c3c);
+        }
+        .match-bar-fill.mid {
+            background: linear-gradient(90deg, #e67e22, #f39c12);
+        }
+        .match-bar-fill.low {
+            background: linear-gradient(90deg, #8e8e93, #bdc3c7);
+        }
+
+        .result-cp {
+            margin-top: 14px;
+            background: #fdf6f3;
+            border-radius: 18px;
+            padding: 14px 16px;
+            font-size: 16px;
+            color: #1a1a2e;
+            text-align: center;
+            border: 1px solid #f0ede8;
+        }
+        .result-cp .cp-char {
+            font-size: 26px;
+            font-weight: 800;
+            color: #c0392b;
+        }
+        .result-cp .cp-desc {
+            font-size: 14px;
+            color: #6e6e73;
+            margin-top: 4px;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+        .result-cp .share-hint {
+            font-size: 13px;
+            color: #8e8e93;
+            margin-top: 6px;
+        }
+        .result-meta {
+            margin-top: 14px;
+            background: #f8f6f2;
+            border-radius: 18px;
+            padding: 16px;
+            text-align: left;
+            font-size: 14px;
+            color: #1a1a2e;
+        }
+        .result-meta span {
+            font-weight: 600;
+            color: #c0392b;
+        }
+        .share-footer {
+            margin-top: 14px;
+            font-size: 12px;
+            color: #c8c4bd;
+            text-align: center;
+            border-top: 1px solid #f0ede8;
+            padding-top: 12px;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .footer-note {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #c8c4bd;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        .share-btn {
+            width: 100%;
+            background: #fdf6f3;
+            color: #c0392b;
+            border: 2px solid #fdebd0;
+            border-radius: 40px;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            margin-top: 12px;
+            letter-spacing: 0.5px;
+            font-family: inherit;
+        }
+        .share-btn:active {
+            transform: scale(0.97);
+        }
+        .share-btn:hover {
+            background: #fdebd0;
+            border-color: #c0392b;
+        }
+
+        .btn-retry {
+            width: 100%;
+            background: #f8f6f2;
+            color: #6e6e73;
+            border: 2px solid #edebe7;
+            border-radius: 40px;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
+            font-family: inherit;
+        }
+        .btn-retry:active {
+            transform: scale(0.97);
+        }
+        .btn-retry:hover {
+            background: #edebe7;
+            border-color: #d5d0c8;
+        }
+        .mt-12 {
+            margin-top: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="app">
+
+        <!-- ===== 顶部：返回首页 + 语言切换 ===== -->
+        <div class="back-home">
+            <a href="/">← 返回首页</a>
+        </div>
+        <div class="lang-switch">
+            <button class="lang-btn" id="langToggle">
+                <span class="lang-label active" id="langLabelZh">中文</span>
+                <span class="toggle-track" id="toggleTrack">
+                    <span class="toggle-thumb" id="toggleThumb"></span>
+                </span>
+                <span class="lang-label" id="langLabelEn">English</span>
+            </button>
+        </div>
+
+        <!-- ===== 头部 ===== -->
+        <h1 id="mainTitle">🌏 Discover Your <span class="highlight">Tianjin</span> Character</h1>
+        <div class="subtitle" id="mainSub">Where the Nine Rivers Meet · Stories of the City</div>
+
+        <!-- ===== 进度条 ===== -->
+        <div id="progressArea" class="hidden">
+            <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+            <div class="progress-label">
+                <span id="progressLabel">🚢 Sailed <span class="highlight" id="progressText">0</span> / 30 miles</span>
+                <span id="progressPercent">0%</span>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!--  信息收集页                                              -->
+        <!-- ========================================================= -->
+        <div id="infoPanel" class="info-box">
+            <div class="q-text">
+                <div id="infoTitle">📋 About You</div>
+                <small id="infoSub">Data is for academic research · Completely anonymous</small>
+            </div>
+            <div class="field-group">
+                <div>
+                    <div class="field-label" id="labelAge">Age <span class="required">*</span></div>
+                    <input type="number" id="userAge" placeholder="Enter your age" min="10" max="99">
+                </div>
+                <div>
+                    <div class="field-label" id="labelCountry">Where are you from? <span class="required">*</span></div>
+                    <input type="text" id="userCountry" placeholder="e.g., United States, South Korea">
+                </div>
+                <div>
+                    <div class="field-label" id="labelDuration">How long have you been learning Chinese? <span class="required">*</span></div>
+                    <select id="userDuration">
+                        <option value="" id="optSelect">Select</option>
+                        <option value="Less than 6 months" id="opt1">Less than 6 months</option>
+                        <option value="6 months – 1 year" id="opt2">6 months – 1 year</option>
+                        <option value="1 – 2 years" id="opt3">1 – 2 years</option>
+                        <option value="2 – 3 years" id="opt4">2 – 3 years</option>
+                        <option value="3+ years" id="opt5">3+ years</option>
+                    </select>
+                </div>
+                <div>
+                    <div class="field-label" id="labelVisit">Have you ever studied in China? <span class="required">*</span></div>
+                    <select id="userVisit">
+                        <option value="" id="visitSelect">Select</option>
+                        <option value="Yes, I have" id="visitYes">Yes, I have</option>
+                        <option value="No, I haven't" id="visitNo">No, I haven't</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn btn-primary w-full" id="startBtn">Start Test →</button>
+        </div>
+
+        <!-- ========================================================= -->
+        <!--  题目区                                                  -->
+        <!-- ========================================================= -->
+        <div id="questionArea" class="hidden">
+            <div class="q-number" id="qNumber">Question 1 / 30</div>
+            <div class="q-text" id="qText">Loading...</div>
+            <div id="optionsBox" class="options"></div>
+            <div class="flex-center">
+                <button class="btn btn-back" id="prevBtn">← Previous</button>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!--  结果页                                                  -->
+        <!-- ========================================================= -->
+        <div id="resultArea" class="result-box hidden">
+            <div id="shareCard">
+                <div class="result-badge" id="resultBadge">Your Tianjin Character:</div>
+                <div class="result-art">
+                    <div class="char-area" id="resultCharDisplay">津</div>
+                    <div class="landmark-area" id="resultLandmarkDisplay">🏛️ Landmark<br>coming soon</div>
+                </div>
+                <div class="result-char" id="rChar">漕</div>
+                <div class="result-title" id="rTitle">The Rule Keeper</div>
+                <div class="result-desc" id="rDesc">Loading description...</div>
+
+                <div class="match-section">
+                    <div class="match-header">
+                        <div class="match-label" id="matchLabel">🎯 Match · You &amp; <span id="matchCharLabel">津</span></div>
+                        <div class="match-number" id="matchPercent">0%</div>
+                    </div>
+                    <div class="match-bar-wrap">
+                        <div class="match-bar-fill" id="matchBarFill" style="width:0%;"></div>
+                    </div>
+                </div>
+
+                <div class="result-cp">
+                    <span id="cpLabel">💞 Your best match is: </span><span class="cp-char" id="rCpChar">海</span>
+                    <div class="cp-desc" id="rCpDesc">Loading...</div>
+                    <div class="share-hint" id="shareHint">📤 Share with friends and see if they're your match!</div>
+                </div>
+                <div class="result-meta">
+                    <div id="metaPhrase">Catchphrase: <span id="rPhrase">---</span></div>
+                    <div style="margin-top:6px;" id="metaFood">Signature Food: <span id="rFood">---</span></div>
+                    <div style="margin-top:6px;" id="metaPlace">Soul Landmark: <span id="rPlace">---</span></div>
+                </div>
+            </div>
+
+            <button class="share-btn" id="shareBtn">📸 Save Share Card</button>
+            <button class="btn-retry" onclick="location.reload()" id="retryBtn">🔄 Retake Test</button>
+        </div>
+
+        <div class="footer-note" id="footerNote">— Discover Your Tianjin Character —</div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  🚀 云开发：初始化
+        // ============================================================
+        let db = null;
+        let cloudReady = false;
+        try {
+            if (typeof cloudbase !== 'undefined' && cloudbase.init) {
+                const app = cloudbase.init({
+                    env: 'jin-personality-d0fxwmg4c28cd06',
+                    region: 'ap-shanghai'
+                });
+                db = app.database();
+                cloudReady = true;
+                console.log('✅ CloudBase initialized');
+            } else {
+                console.warn('⚠️ CloudBase SDK not loaded');
+            }
+        } catch (e) {
+            console.warn('⚠️ CloudBase init failed', e.message);
+        }
+
+        // ============================================================
+        //  🌐 多语言控制
+        // ============================================================
+        let currentLang = 'en'; // 'zh' 或 'en'
+
+        // ===== UI 文案 =====
+        const ui = {
+            zh: {
+                title: '🌏 发现你的<span class="highlight">津字</span>人格',
+                subtitle: '九河下梢 · 人间烟火',
+                infoTitle: '📋 认识一下~',
+                infoSub: '数据仅用于学术研究 · 完全匿名',
+                labelAge: '年龄',
+                labelCountry: '来自哪里？',
+                labelDuration: '学习中文多久了？',
+                labelVisit: '是否来中国学习过？',
+                optSelect: '请选择',
+                opt1: '少于6个月',
+                opt2: '6个月-1年',
+                opt3: '1-2年',
+                opt4: '2-3年',
+                opt5: '3年以上',
+                visitSelect: '请选择',
+                visitYes: '是，来过',
+                visitNo: '否，没来过',
+                startBtn: '开始测试 →',
+                prevBtn: '← 上一题',
+                qPrefix: '第',
+                qSuffix: '题',
+                progressLabel: '🚢 已航行 <span class="highlight">{0}</span> / 30 海里',
+                resultBadge: '你的津字人格是：',
+                matchLabel: '🎯 匹配度 · 你与 <span>{0}</span> 的契合程度',
+                cpLabel: '💞 你最配的津字是：',
+                shareHint: '📤 分享给朋友，看看 TA 是不是你的 CP 字',
+                metaPhrase: '津选口头禅：',
+                metaFood: '津味之选：',
+                metaPlace: '灵魂地标：',
+                shareBtn: '📸 保存分享卡片',
+                retryBtn: '🔄 再测一次',
+                footer: '— 发现你的津字人格 —',
+                landmarkLabel: '🏛️ 地标'
+            },
+            en: {
+                title: '🌏 Discover Your <span class="highlight">Tianjin</span> Character',
+                subtitle: 'Where the Nine Rivers Meet · Stories of the City',
+                infoTitle: '📋 About You',
+                infoSub: 'Data is for academic research · Completely anonymous',
+                labelAge: 'Age',
+                labelCountry: 'Where are you from?',
+                labelDuration: 'How long have you been learning Chinese?',
+                labelVisit: 'Have you ever studied in China?',
+                optSelect: 'Select',
+                opt1: 'Less than 6 months',
+                opt2: '6 months – 1 year',
+                opt3: '1 – 2 years',
+                opt4: '2 – 3 years',
+                opt5: '3+ years',
+                visitSelect: 'Select',
+                visitYes: 'Yes, I have',
+                visitNo: "No, I haven't",
+                startBtn: 'Start Test →',
+                prevBtn: '← Previous',
+                qPrefix: 'Question',
+                qSuffix: '/ 30',
+                progressLabel: '🚢 Sailed <span class="highlight">{0}</span> / 30 miles',
+                resultBadge: 'Your Tianjin Character:',
+                matchLabel: '🎯 Match · You &amp; <span>{0}</span>',
+                cpLabel: '💞 Your best match is: ',
+                shareHint: "📤 Share with friends and see if they're your match!",
+                metaPhrase: 'Catchphrase:',
+                metaFood: 'Signature Food:',
+                metaPlace: 'Soul Landmark:',
+                shareBtn: '📸 Save Share Card',
+                retryBtn: '🔄 Retake Test',
+                footer: '— Discover Your Tianjin Character —',
+                landmarkLabel: '🏛️ Landmark'
+            }
+        };
+
+        // ============================================================
+        //  📊 留学生版题目（中英双语）
+        // ============================================================
+        const questionsData = [{
+            q: { zh: "去西北角吃早点，面对排到街角的长队，你会？",
+                en: "You go to the Northwest Corner for breakfast and see a long line. What do you do?" },
+            dim: 0,
+            a: { zh: "默默低头刷手机，安静等待", en: "Scroll through your phone quietly, wait patiently" },
+            b: { zh: "忍不住探头搭话：\"介得排到嘛时候？\"", en: "Crane your neck and chat: 'How long will this take?'" }
+        }, {
+            q: { zh: "老板临时通知周末团建去蓟州爬山，你第一反应是？",
+                en: "Your boss announces a weekend team-building trip. Your first reaction?" },
+            dim: 0,
+            a: { zh: "内心毫无波澜，想请假回家躺着", en: "Feel meh, think about calling in sick" },
+            b: { zh: "立刻热血上头，开始张罗零食歌单", en: "Get pumped, plan snacks and playlist" }
+        }, {
+            q: { zh: "刷短视频看到有人\"黑\"天津，你会？", en: "You see a video bad-mouthing Tianjin. What do you do?" },
+            dim: 0,
+            a: { zh: "心里不舒服，划过去眼不见为净", en: "Feel uncomfortable, but scroll past" },
+            b: { zh: "必须点开评论区，敲字跟对方掰扯", en: "Jump into comments and type a rebuttal" }
+        }, {
+            q: { zh: "傍晚在民园广场散步，你更喜欢？", en: "An evening stroll at Minyuan Square—what do you enjoy more?" },
+            dim: 0,
+            a: { zh: "找长椅坐着，看来往人群发呆", en: "Find a bench and zone out watching people" },
+            b: { zh: "跟着音乐扭两下，或加入踢毽子人群", en: "Boogie to the music or join a game" }
+        }, {
+            q: { zh: "发一条关于天津的朋友圈，你通常是？", en: "When you post about Tianjin on social media, you usually:" },
+            dim: 0,
+            a: { zh: "只发九宫格，配文极简", en: "Just post a 9-photo grid with a short caption" },
+            b: { zh: "配上小作文，再加几个表情包", en: "Write a long essay with emojis" }
+        }, {
+            q: { zh: "去名流茶馆听相声，你更享受哪种状态？", en: "At a crosstalk show, which state do you prefer?" },
+            dim: 0,
+            a: { zh: "台下眯着眼，品味捧逗门道", en: "Sit back, savor the craft and punchlines" },
+            b: { zh: "台下扯嗓子喊\"吁~\"，跟着起哄", en: "Shout 'Yuuu~' and heckle with the crowd" }
+        }, {
+            q: { zh: "新搬到一个天津老小区，你会？", en: "You move into an old Tianjin neighborhood. What do you do?" },
+            dim: 0,
+            a: { zh: "先观察几天，不主动打招呼", en: "Observe for a few days, don't say hi first" },
+            b: { zh: "当天就把对门楼上楼下混熟", en: "Get chummy with neighbors right away" }
+        }, {
+            q: { zh: "你心中\"天津卫的老例儿\"，最重要的是？",
+                en: "What's the most important 'old Tianjin custom'?" },
+            dim: 1,
+            a: { zh: "嘛事儿都讲先来后到，加塞儿不行", en: "First come, first served—no cutting in line" },
+            b: { zh: "人与人得讲面儿，得饶人处且饶人", en: "Save face for others; be forgiving" }
+        }, {
+            q: { zh: "好朋友借了钱到约定日期没还，你会？",
+                en: "A close friend didn't pay back money on time. You would:" },
+            dim: 1,
+            a: { zh: "直接开口提醒，亲兄弟明算账", en: "Remind them directly—clear accounts make good friends" },
+            b: { zh: "抹不开面儿，暗示两句，不还就当随份子", en: "Drop hints, and if it doesn't come back, treat it as a gift" }
+        }, {
+            q: { zh: "玩剧本杀或密室逃脱，你是哪种玩家？",
+                en: "In a murder mystery game, what kind of player are you?" },
+            dim: 1,
+            a: { zh: "严格遵循线索逻辑，推理严密", en: "Strictly follow clues and logic" },
+            b: { zh: "看气氛，为了大家体验好，偶尔放水", en: "Go with the flow, occasionally go easy" }
+        }, {
+            q: { zh: "看待去年\"天津大爷跳水\"，你更欣赏哪一点？",
+                en: "About the viral 'Tianjin grandpa diving' craze, what do you appreciate more?" },
+            dim: 1,
+            a: { zh: "自发形成的民间秩序，有人维持", en: "The spontaneous grassroots order and coordination" },
+            b: { zh: "那种不在乎眼光、活出自我的热烈", en: "The unapologetic, live-and-let-live warmth" }
+        }, {
+            q: { zh: "买煎饼果子看到熟客忘带钱，摊主说\"下次再说\"，你想？",
+                en: "Buying jianbing, you see a regular forget their wallet. The vendor waves them off. What do you think?" },
+            dim: 1,
+            a: { zh: "摊主不合适，小本买卖没规矩亏本", en: "That's not good business—small margins need rules" },
+            b: { zh: "摊主真局气！天津人就得有人情味儿", en: "That's the Tianjin way—full of heart!" }
+        }, {
+            q: { zh: "单位评选优秀员工，你更倾向哪种方式？",
+                en: "For selecting an outstanding employee, you prefer:" },
+            dim: 1,
+            a: { zh: "严格按KPI数据，谁分高谁上", en: "Strictly based on KPI data—highest scores win" },
+            b: { zh: "轮流坐庄，或看谁人缘好帮大家多", en: "Rotate the honor or pick the most helpful person" }
+        }, {
+            q: { zh: "早高峰开车南京路，旁边车强行并道不打灯，你会？",
+                en: "Driving during rush hour, a car forces its way in without signaling. You would:" },
+            dim: 1,
+            a: { zh: "按喇叭寸步不让，TA违规了你怕嘛", en: "Honk and hold your ground—they broke the rules" },
+            b: { zh: "点一脚刹车让他进，多一事不如少一事", en: "Ease on the brakes and let them in" }
+        }, {
+            q: { zh: "提到\"杨柳青年画\"，你更喜欢哪种风格？",
+                en: "When it comes to Yangliuqing New Year paintings, which style do you prefer?" },
+            dim: 2,
+            a: { zh: "工笔细腻、胖娃娃抱鲤鱼写实款", en: "The finely detailed, realistic classic style" },
+            b: { zh: "色彩大胆、构图奇巧的抽象创新款", en: "The bold-color, innovative abstract style" }
+        }, {
+            q: { zh: "下班后的独处时光，你更愿意？", en: "Your alone time after work—what do you rather do?" },
+            dim: 2,
+            a: { zh: "钻研新菜谱，或修理坏掉的小电器", en: "Experiment with a new recipe, or fix a broken appliance" },
+            b: { zh: "看科幻电影，或琢磨天马行空的点子", en: "Watch a sci-fi movie, or brainstorm a new idea" }
+        }, {
+            q: { zh: "听别人给你讲大道理，你更看重？",
+                en: "When someone lectures you on big life principles, what do you value more?" },
+            dim: 2,
+            a: { zh: "内容有无数据支撑，能否落地", en: "Whether their points are backed by data and practical" },
+            b: { zh: "角度是否新颖，有无打开新思路", en: "Whether their perspective is fresh and inspiring" }
+        }, {
+            q: { zh: "看到\"风筝魏\"的百变风筝，你最惊叹的是？",
+                en: "Seeing the 'Kite Wei' incredible kites, what amazes you most?" },
+            dim: 2,
+            a: { zh: "匠人手上\"扎糊绘放\"的硬功夫", en: "The artisan's precise skills—frame, paste, paint, fly" },
+            b: { zh: "匠人脑子里千奇百怪的奇思妙想", en: "The artisan's imagination—kites in fantastic shapes" }
+        }, {
+            q: { zh: "你平时写的日记或备忘录，更偏向于？", en: "Your diary or notes usually lean toward:" },
+            dim: 2,
+            a: { zh: "吃了嘛、干了嘛的实在流水账", en: "A plain log of what you ate, did, and spent" },
+            b: { zh: "心情起伏、梦到嘛的感悟随笔", en: "Your mood swings, dreams, and sudden inspirations" }
+        }, {
+            q: { zh: "周末去海河边逛一座桥，你会更想去？",
+                en: "If you visit a bridge along the Haihe River, which one draws you more?" },
+            dim: 2,
+            a: { zh: "结实厚重、百年沧桑的解放桥", en: "The solid, historic Jiefang Bridge" },
+            b: { zh: "造型独特、夜晚灯光璀璨的永乐桥", en: "The uniquely shaped, illuminated Yongle Bridge" }
+        }, {
+            q: { zh: "假如穿越回古代天津卫，你更想当？",
+                en: "If you could time-travel to ancient Tianjin, what would you rather be?" },
+            dim: 2,
+            a: { zh: "踏实勤恳、倒腾米面布匹的船工", en: "A hardworking canal boatman hauling goods" },
+            b: { zh: "周游四方、见多识广的行商", en: "A well-traveled merchant bringing exotic items" }
+        }, {
+            q: { zh: "朋友突然约你今晚去\"津湾广场\"听音乐会，你会？",
+                en: "A friend invites you to an open-air concert tonight. You would:" },
+            dim: 3,
+            a: { zh: "先问几点结束，太晚不行，要作息规律", en: "Ask when it ends—if it's too late, skip it" },
+            b: { zh: "管他几点！到地儿再说，大不了转场撸串", en: "Who cares about the time! Figure it out when you get there" }
+        }, {
+            q: { zh: "看看你现在的工位或书桌，通常是哪种状态？",
+                en: "Look at your desk or workspace right now. It's usually:" },
+            dim: 3,
+            a: { zh: "分门别类井井有条，用完归位", en: "Neatly categorized, everything in its place" },
+            b: { zh: "乱中有序，堆满小玩意儿但自己找得到", en: "Organized chaos, but you always find what you need" }
+        }, {
+            q: { zh: "追一部热播剧或连载小说，你习惯怎么追？",
+                en: "How do you follow a hit TV series or novel?" },
+            dim: 3,
+            a: { zh: "攒到全部更新完，一口气刷完", en: "Wait until all episodes are out, then binge" },
+            b: { zh: "追到哪算哪，甚至找剧透或同人", en: "Watch as it goes, and look up spoilers" }
+        }, {
+            q: { zh: "如果你有\"海河夜跑\"的习惯，你的风格是？",
+                en: "If you have a habit of night running along the Haihe, your style is:" },
+            dim: 3,
+            a: { zh: "规划固定路线，每天跑足5公里", en: "Stick to a fixed route, run exactly 5km every day" },
+            b: { zh: "看到卖熟梨糕的就停下来买一份", en: "Run a bit, stop for snacks, and stroll" }
+        }, {
+            q: { zh: "平时买衣服或日用品，你更看重？",
+                en: "When buying clothes or daily goods, what do you care more about?" },
+            dim: 3,
+            a: { zh: "耐用性和性价比，用个十年八年", en: "Durability and value—something that lasts" },
+            b: { zh: "是否新奇有趣，体验过就行", en: "Novelty and unique design—the experience counts" }
+        }, {
+            q: { zh: "你更欣赏\"津味相声\"里哪种捧哏风格？",
+                en: "Which style of crosstalk straight-man role do you prefer?" },
+            dim: 3,
+            a: { zh: "稳重托底，一句\"您说得对\"稳住全场", en: "The steady, grounding type—holds the act together" },
+            b: { zh: "灵活刁钻，一句话怼得逗哏哑口无言", en: "The witty, sharp type—one comeback leaves them speechless" }
+        }, {
+            q: { zh: "参加几十人的大型聚会，你通常是？", en: "At a large party with dozens of people, you usually:" },
+            dim: 3,
+            a: { zh: "坐固定位置，跟身边人深度聊天", en: "Stay in one spot, having deep conversations" },
+            b: { zh: "满场飞，拿着酒杯到处串台", en: "Mingle everywhere, clinking glasses with everyone" }
+        }, {
+            q: { zh: "头一回到\"意大利风情区\"逛，你会怎么玩？",
+                en: "First time visiting the Italian-style district—how do you explore?" },
+            dim: 3,
+            a: { zh: "拿地图挨个找标志建筑打卡", en: "Pull out your map, check off all the landmarks" },
+            b: { zh: "不看地图，钻小巷随缘发现惊喜", en: "Ditch the map, wander into unknown alleys" }
+        }, {
+            q: { zh: "如果必须给外地朋友带一件\"天津特产\"，你会选？",
+                en: "If you had to bring one Tianjin specialty to a friend, you'd pick:" },
+            dim: 2,
+            a: { zh: "十八街麻花——实在、管饱、名气大", en: "18th Street Fried Dough Twists—hearty, filling, famous" },
+            b: { zh: "泥人张或杨柳青年画——有艺术感", en: "Clay Figure Zhang or Yangliuqing paintings—artistic and meaningful" }
+        }];
+
+        // ============================================================
+        //  📊 结果数据 - 英中文对照
+        // ============================================================
+        const resultsData = {
+            "0000": {
+                char: "漕",
+                title: { zh: "执规者", en: "The Rule Keeper" },
+                desc: { zh: "你是三岔河口最精准的那杆秤。千年漕运的严谨刻进了你的DNA，做事讲究\"程序正义\"，厌恶一切插队和糊弄。在你眼里，规矩不是束缚，而是让万事万物高效运转的魔法。",
+                    en: "You are the most accurate scale at the Sancha River mouth. The rigor of thousand-year canal shipping is etched into your DNA. You value 'procedural justice' and can't stand line-jumping or sloppy work. In your eyes, rules aren't constraints—they're magic that makes everything run smoothly." },
+                phrase: { zh: "按老例儿来，没毛病！", en: "Let's do it by the old code—no issues!" },
+                cp: "直",
+                food: { zh: "罾蹦鲤鱼（形态完整、鳞骨酥脆）", en: "Zèngbèng Lǐyú (Crispy scaly carp)" },
+                place: { zh: "三岔河口（漕运枢纽，秩序之源）", en: "Sancha River Estuary" }
+            },
+            "0001": {
+                char: "谐",
+                title: { zh: "通透者", en: "The Clear-Eyed One" },
+                desc: { zh: "静水深流，你是人群中最清醒的旁观者。用\"规矩\"框定自我，用\"幽默\"解构外界。你看透生活的荒诞却不说破，轻描淡写一句\"嘛玩儿意儿\"，就把所有沉重都化作了云淡风轻。",
+                    en: "Still waters run deep. You are the clearest observer in any crowd. You frame yourself with 'rules' and deconstruct the world with 'humor.' You see life's absurdities but don't call them out—just a casual 'What even is that?' turns all heaviness into a breeze." },
+                phrase: { zh: "嘛玩儿意儿~", en: "What even is that~" },
+                cp: "风",
+                food: { zh: "茶汤（看似黏糊，实则香甜细腻）", en: "Chá Tāng (Sweet millet paste)" },
+                place: { zh: "名流茶馆（嬉笑怒骂皆成文章）", en: "Mingliu Teahouse" }
+            },
+            "0010": {
+                char: "容",
+                title: { zh: "整合者", en: "The Integrator" },
+                desc: { zh: "你像海河的河床，静默而宽厚。别人只看到碎片，你脑子里却能拼出宏大的\"蓝图画卷\"。你是五方杂处的调停人，能把东西南北的文化资源揉碎了重组，是深藏不露的\"终极谋略家\"。",
+                    en: "You're like the riverbed of the Haihe—quiet and vast. Others see fragments; your mind weaves them into a grand blueprint. You're the mediator of diverse cultures, able to blend resources from all directions into something new—a master strategist in the shadows." },
+                phrase: { zh: "嘛事儿都得盘盘道，急不得。", en: "Gotta chew things over—no rush." },
+                cp: "海",
+                food: { zh: "八大碗（集各路菜系精华于一桌）", en: "Bā Dà Wǎn (Eight Big Dishes)" },
+                place: { zh: "广东会馆（四方商贾汇聚于此）", en: "Guangdong Guild Hall" }
+            },
+            "0011": {
+                char: "直",
+                title: { zh: "实干派", en: "The Doer" },
+                desc: { zh: "继承了\"直沽古寨\"的血脉，你信奉\"行动大于言语\"。脑洞虽大，但落地更扎实；手握绝活，心里有算盘。你不玩虚的，再复杂的机器到你手里都能乖乖听话。",
+                    en: "Heir to the 'Zhigu ancient fort' spirit, you believe action speaks louder than words. You dream big but ground it in reality. You've got skills and a sharp mind. No fluff—even the most complex machine obeys your hands." },
+                phrase: { zh: "直接啫！费那事儿干嘛？", en: "Just do it! Why overthink?" },
+                cp: "卫",
+                food: { zh: "嘎巴菜（把煎饼切碎了泡卤子）", en: "Gāba Cài (Tianjin fried crepe in gravy)" },
+                place: { zh: "天津站世纪钟（精密运转的工业美学）", en: "Century Clock at Tianjin Station" }
+            },
+            "0100": {
+                char: "沽",
+                title: { zh: "守望者", en: "The Caretaker" },
+                desc: { zh: "你是七十二沽里一汪温柔的水。念旧、重情、不善言辞，却把对故土和亲朋的深情藏在每一个具体的动作里——帮你收快递、给你留灯、生病时端来一碗热粥。\"最可靠的后盾\"就是你。",
+                    en: "You are a gentle stream among the seventy-two inlets. Nostalgic, loyal, not good with words—but you pour all your love for home and family into small acts: accepting packages for neighbors, leaving the light on, bringing hot soup when someone's sick. The most reliable rock anyone could ask for." },
+                phrase: { zh: "咱们嘛时候约顿饭啊？", en: "When are we gonna grab a meal?" },
+                cp: "义",
+                food: { zh: "罾蹦鲤鱼（完整形态、鳞骨酥脆）", en: "Zèngbèng Lǐyú (Crispy scaly carp)" },
+                place: { zh: "海河亲水平台（静静流淌，润物无声）", en: "Haihe Waterfront Promenade" }
+            },
+            "0101": {
+                char: "泥",
+                title: { zh: "造梦师", en: "The Dream Shaper" },
+                desc: { zh: "手上有泥，心中有梦。你像\"泥人张\"一样，善于把细腻到发丝的情感揉捏进作品里。你对外界的悲欢有着超乎常人的敏锐，是浪漫到骨子里的理想主义者，在喧嚣中守护着一座内心的桃花源。",
+                    en: "Mud on your hands, dreams in your heart. Like 'Clay Figure Zhang,' you shape delicate emotions into art with hair-fine precision. You have an extraordinary sensitivity to the joys and sorrows around you—a romantic idealist guarding a hidden garden in your soul." },
+                phrase: { zh: "我心里有数儿。", en: "I know it in my heart." },
+                cp: "画",
+                food: { zh: "熟梨糕（造型精巧，米香中透着匠心）", en: "Shú Lí Gāo (Steamed rice cakes)" },
+                place: { zh: "泥人张美术馆（指尖有乾坤）", en: "Clay Figure Zhang Art Museum" }
+            },
+            "0110": {
+                char: "口",
+                title: { zh: "百事通", en: "The Connector" },
+                desc: { zh: "九河下梢的烟火气养出了你。看着内敛，却把\"人情世故\"摸得门儿清。哪家的煎饼果子加俩鸡蛋最香、哪条小路能躲开早高峰，您了问我就对了。你是天津活着的\"大众点评\"。",
+                    en: "The vibrant life of the lower river has shaped you. Outwardly reserved, but you've got 'people smarts' down to a T. You know which jianbing stall uses two eggs, which backstreet avoids traffic—just ask. You're Tianjin's living, breathing local guide." },
+                phrase: { zh: "嘛地方？我门儿清！", en: "Where? I know it like the back of my hand!" },
+                cp: "门",
+                food: { zh: "熟梨糕（走街串巷的叫卖声）", en: "Shú Lí Gāo (Steamed rice cakes)" },
+                place: { zh: "沈阳道古物市场（三教九流、信息交汇）", en: "Shenyang Dao Antique Market" }
+            },
+            "0111": {
+                char: "渡",
+                title: { zh: "引渡人", en: "The Ferryman" },
+                desc: { zh: "你这辈子是来渡人的。极致的共情力让你总能觉察到别人心底的惊涛骇浪，却不动声色地递上一根船桨。你习惯燃烧自己照亮他人的路，是暗夜中最温暖的那座灯塔。",
+                    en: "You were born to ferry others across. Your extreme empathy lets you sense the storms in people's hearts, yet you quietly hand them an oar. You light your own path to illuminate others'—the warmest lighthouse in the darkest night." },
+                phrase: { zh: "没事儿，有哥哥/姐姐我呢。", en: "It's okay, I've got your back." },
+                cp: "沽",
+                food: { zh: "杨村糕干（朴实无华，救人一命）", en: "Yangcun Gāo Gān (Plain rice cakes)" },
+                place: { zh: "天后宫（妈祖庇佑出海人平安归来）", en: "Tianhou Temple" }
+            },
+            "1000": {
+                char: "卫",
+                title: { zh: "捍卫者", en: "The Defender" },
+                desc: { zh: "天生带着\"拱卫京师\"的使命感！你眼里揉不得沙子，\"纪律就是生命线\"。凡事冲在第一线，路见不平一声吼，把\"靠谱\"和\"正义\"两个词刻在了脑门上，是队友最安心的盾牌。",
+                    en: "Born with a mission to 'guard the capital'! You can't stand disorder. Discipline is your lifeline. You charge to the front, roar at injustice, and wear 'reliable' and 'righteous' on your sleeve. You're the shield your team can always count on." },
+                phrase: { zh: "好么眼儿的，介算嘛事儿！我来！", en: "What the heck? Leave it to me!" },
+                cp: "直",
+                food: { zh: "锅巴菜（卤子咸香厚重）", en: "Gāba Cài (Tianjin fried crepe in gravy)" },
+                place: { zh: "天津鼓楼（晨钟暮鼓，固若金汤）", en: "Tianjin Drum Tower" }
+            },
+            "1001": {
+                char: "鼓",
+                title: { zh: "燃情者", en: "The Energizer" },
+                desc: { zh: "你是\"津门法鼓\"里最响的那一槌！精力旺盛到无处安放，走到哪儿就把热闹带到哪儿。你善于用热烈的节奏点燃全场，有你在的局永远不会冷场，是天生的气氛组组长。",
+                    en: "You're the loudest drum in the Tianjin ceremonial ensemble! Boundless energy—you bring the party wherever you go. You ignite any room with your lively rhythm, and no gathering ever goes flat with you around. The ultimate hype-maker." },
+                phrase: { zh: "走起来！别坐着呀！", en: "Let's get moving! No sitting around!" },
+                cp: "风",
+                food: { zh: "崩豆张（嘎嘣脆，嚼着带响）", en: "Bèngdòu Zhāng (Crispy flavored beans)" },
+                place: { zh: "民园广场（最不缺的就是热闹与人群）", en: "Minyuan Square" }
+            },
+            "1010": {
+                char: "门",
+                title: { zh: "破局者", en: "The Breaker" },
+                desc: { zh: "\"津门\"的气魄在你身上体现得淋漓尽致。你敢于制定规则，更敢于打破陈规。你像解放桥开桥一样，总能找到让巨轮通行的时机，带着队伍跨越天堑，是天生的统帅和变革者。",
+                    en: "The spirit of 'Jinmen' (Tianjin Gate) lives in you. You know how to set rules—and how to break old ones. Like the Jiefang Bridge opening for ships, you always find the right moment for big moves, leading your crew across any chasm. A born commander and reformer." },
+                phrase: { zh: "把门开开！咱瞧瞧外头去！", en: "Open the gate! Let's see what's out there!" },
+                cp: "海",
+                food: { zh: "耳朵眼炸糕（外皮酥脆，内里甜糯）", en: "Earhole Fried Cake (Crispy shell, sweet filling)" },
+                place: { zh: "解放桥（开启之间，天堑变通途）", en: "Jiefang Bridge" }
+            },
+            "1011": {
+                char: "风",
+                title: { zh: "探险家", en: "The Explorer" },
+                desc: { zh: "你是\"风筝魏\"手里那只挣脱了线的风筝！满脑子奇思妙想，却又守得住手艺人的底线。没有什么能束缚你，因为风就是你的人生常态——今天在北京，明天可能就在巴黎。",
+                    en: "You're the kite that's broken free from 'Kite Wei'! Your head is full of wild ideas, yet you respect the artisan's craft. Nothing ties you down, because the wind is your natural state—today in Beijing, tomorrow maybe Paris." },
+                phrase: { zh: "无拘无束，嘛也不叫事！", en: "Free as can be—nothing's a big deal!" },
+                cp: "门",
+                food: { zh: "狗不理包子（十八个褶，每口都惊喜）", en: "Goubuli Steamed Buns (18 pleats, surprises in every bite)" },
+                place: { zh: "天津之眼（升到最高处，俯瞰全世界）", en: "Tianjin Eye Ferris wheel" }
+            },
+            "1100": {
+                char: "义",
+                title: { zh: "热心肠", en: "The Loyal Heart" },
+                desc: { zh: "\"重实尚义\"四个字就是你的金字招牌。你信奉\"为朋友两肋插刀\"，兜里有十块能给兄弟花八块。最见不得别人受委屈，路见不平必须拔刀相助，是江湖中传说的\"及时雨\"宋江转世。",
+                    en: "'Honor and loyalty' is your golden rule. You'd give eight of your ten bucks to a friend in need. You can't stand to see others wronged, and you'll jump in without hesitation—a modern-day hero straight out of a classic tale." },
+                phrase: { zh: "嘛钱不钱的，乐呵乐呵得了！", en: "Forget about money—just have a good time!" },
+                cp: "沽",
+                food: { zh: "老爆三（硬菜、实在、下饭）", en: "Lǎo Bào Sān (Sautéed liver, kidney, and tripe)" },
+                place: { zh: "谦祥益保记（相声里的江湖道义）", en: "Qianxiang Yi Baoxi Teahouse" }
+            },
+            "1101": {
+                char: "画",
+                title: { zh: "美学匠", en: "The Aesthetician" },
+                desc: { zh: "你把日子过成了\"杨柳青年画\"——热烈、饱满、色彩斑斓。你热情似火，审美敏锐，善于在平凡琐碎中发现被忽略的美，随手一拍就是大片，随手一摆就是仪式感。",
+                    en: "You live your life like a Yangliuqing New Year painting—vibrant, full, and colorful. Passionate, artistically sharp, you find beauty in everyday details. Every snapshot is a masterpiece; every little arrangement is a ceremony." },
+                phrase: { zh: "倍儿好看！嘛叫生活？介就叫生活！", en: "So gorgeous! You call that life? THIS is life!" },
+                cp: "泥",
+                food: { zh: "杨村糕干（雪白方正，像待涂抹的画布）", en: "Yangcun Gāo Gān (Snow-white rice cakes)" },
+                place: { zh: "杨柳青古镇（处处是雕梁画栋）", en: "Yangliuqing Ancient Town" }
+            },
+            "1110": {
+                char: "海",
+                title: { zh: "号召者", en: "The Caller" },
+                desc: { zh: "渤海湾的雄风扑面而来！你天生具备让人追随的魅力，胸怀宽广能容万物。只要你在，风浪就得退避三舍。你是天生的演说家和领航员，一句话就能把散沙凝聚成高塔。",
+                    en: "The bold spirit of Bohai Bay bursts from you! You're born with a charisma that draws followers. Your heart is wide enough to embrace all. When you're around, the waves step back. A natural orator and navigator—one word from you turns sand into a tower." },
+                phrase: { zh: "跟我走，没错儿！出了事算我的！", en: "Follow me—no worries! I'll take the heat." },
+                cp: "门",
+                food: { zh: "煎饼果子（包容万物，啥都能加）", en: "Jianbing guozi (Inclusive, with eggs, fried dough, or crackers)" },
+                place: { zh: "滨海新区妈祖像（面朝大海，庇佑万民）", en: "Mazu Statue in Binhai New Area" }
+            },
+            "1111": {
+                char: "津",
+                title: { zh: "摆渡者", en: "The Ferrymaster" },
+                desc: { zh: "你就是\"天子渡口\"那艘最灵动的船！热情、仗义、浪漫、随性，所有讨喜的因子你全占了。你仿佛天生就知道如何连接人与机遇，你在哪里，哪里就是欢乐和财富的交汇点。",
+                    en: "You are the nimblest boat at the 'Emperor's Ferry'! Warm, loyal, romantic, and spontaneous—you've got all the lovable traits. You seem to know instinctively how to connect people with opportunities. Wherever you are, joy and fortune converge." },
+                phrase: { zh: "倍儿哏儿！嘛都不是事儿！", en: "So much fun! Nothing's a problem!" },
+                cp: "海",
+                food: { zh: "天津三绝全包圆", en: "The Tianjin trio!" },
+                place: { zh: "海河游船（日夜穿梭，连接两岸繁华）", en: "Haihe Sightseeing Boat" }
+            }
+        };
+
+        // CP 描述
+        const cpDescriptions = {
+            "直": { zh: "你们俩是职场上的最佳拍档，一个定规则，一个落地执行",
+                en: "You two are the ultimate work duo: one sets rules, the other gets it done." },
+            "风": { zh: "你是生活的解构者，他是世界的探险家，凑一起能聊一整夜",
+                en: "You deconstruct life; they explore the world. Together you could chat all night." },
+            "海": { zh: "你负责掌舵穿梭，他负责号召同行，你俩是天选航海搭档",
+                en: "You steer the ship; they call the crew. A seafaring dream team." },
+            "卫": { zh: "你负责攻坚技术难题，他负责守住前线阵地",
+                en: "You tackle technical challenges; they hold the frontline." },
+            "义": { zh: "你闯荡江湖讲义气，他留守后方暖人心",
+                en: "You roam the world with honor; they keep the home fires warm." },
+            "画": { zh: "你们俩是艺术双璧，一个雕琢立体，一个涂抹平面",
+                en: "You two are artistic gems: one sculpts in 3D, the other paints on flat surfaces." },
+            "泥": { zh: "你是平面美学大师，他是立体造物高手",
+                en: "You're a 2D art wizard; they're a 3D sculpting genius." },
+            "门": { zh: "你负责发现新大陆，他负责撬开大门口", en: "You discover new worlds; they pry open doors." },
+            "沽": { zh: "你渡人过河，他守人归家，是精神上的同路人",
+                en: "You ferry people across; they welcome them home. Spiritual kindred spirits." },
+            "鼓": { zh: "你负责燥热地面，他负责飞向高空", en: "You heat up the ground; they soar the skies." },
+            "容": { zh: "你负责整合资源，他负责振臂一呼", en: "You integrate resources; they rally the troops." },
+            "谐": { zh: "你是生活的解构者，他是世界的探险家",
+                en: "You deconstruct life; they explore the world. Together you could chat all night." },
+            "口": { zh: "你通晓内务，他开拓外联，珠联璧合", en: "You handle inside intel; they handle outside outreach." },
+            "渡": { zh: "你渡人过河，他守人归家，是精神上的同路人",
+                en: "You ferry people across; they welcome them home. Spiritual kindred spirits." },
+            "漕": { zh: "一个定规则，一个落地执行，职场最佳拍档",
+                en: "One sets the rules, the other gets it done—the perfect work duo." }
+        };
+
+        // ============================================================
+        //  🧠 核心逻辑
+        // ============================================================
+        let currentQuestion = -1;
+        let answers = [];
+        let userInfo = {};
+        let isTransitioning = false;
+        let lastResultData = null;
+        let isResultPage = false;
+        const totalQ = questionsData.length;
+
+        // DOM 引用
+        const qNumber = document.getElementById('qNumber');
+        const qText = document.getElementById('qText');
+        const optionsBox = document.getElementById('optionsBox');
+        const prevBtn = document.getElementById('prevBtn');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const progressPercent = document.getElementById('progressPercent');
+        const progressLabel = document.getElementById('progressLabel');
+        const qArea = document.getElementById('questionArea');
+        const rArea = document.getElementById('resultArea');
+        const progressArea = document.getElementById('progressArea');
+        const infoPanel = document.getElementById('infoPanel');
+
+        function hideAll() {
+            infoPanel.classList.add('hidden');
+            qArea.classList.add('hidden');
+            rArea.classList.add('hidden');
+            progressArea.classList.add('hidden');
+        }
+
+        function showInfo() { hideAll();
+            infoPanel.classList.remove('hidden'); }
+
+        function showQuestion() { hideAll();
+            qArea.classList.remove('hidden');
+            progressArea.classList.remove('hidden'); }
+
+        function showResult() { hideAll();
+            rArea.classList.remove('hidden');
+            progressArea.classList.remove('hidden'); }
+
+        function getLangText(obj) {
+            return obj[currentLang] || obj['en'];
+        }
+
+        // ===== 渲染题目（核心修复） =====
+        function renderQuestion(index) {
+            currentQuestion = index;
+            const item = questionsData[index];
+            const lang = currentLang;
+            const t = ui[lang];
+
+            qNumber.textContent = `${t.qPrefix} ${index+1} ${t.qSuffix}`;
+            qText.textContent = getLangText(item.q);
+
+            const labels = ['A', 'B'];
+            const selectedVal = answers[index];
+            optionsBox.innerHTML = `
+                <div class="option" data-val="0">
+                    <span class="opt-label">${labels[0]}</span>
+                    <span class="opt-text">${getLangText(item.a)}</span>
+                </div>
+                <div class="option" data-val="1">
+                    <span class="opt-label">${labels[1]}</span>
+                    <span class="opt-text">${getLangText(item.b)}</span>
+                </div>
+            `;
+
+            const optionEls = optionsBox.querySelectorAll('.option');
+            optionEls.forEach(el => {
+                const val = parseInt(el.dataset.val);
+                if (selectedVal !== null && selectedVal === val) el.classList.add('selected');
+                el.addEventListener('click', handleOptionClick);
+            });
+
+            const done = index;
+            const pct = Math.round((done / totalQ) * 100);
+            progressBar.style.width = pct + '%';
+            progressText.textContent = done;
+            progressPercent.textContent = pct + '%';
+            progressLabel.innerHTML = t.progressLabel.replace('{0}', done);
+            prevBtn.textContent = t.prevBtn;
+            prevBtn.disabled = index === 0;
+        }
+
+        function handleOptionClick(e) {
+            if (isTransitioning) return;
+            const el = e.currentTarget;
+            const val = parseInt(el.dataset.val);
+            const index = currentQuestion;
+            if (answers[index] === val) return;
+            answers[index] = val;
+            const optionEls = optionsBox.querySelectorAll('.option');
+            optionEls.forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+            isTransitioning = true;
+            setTimeout(() => {
+                if (index + 1 < totalQ) renderQuestion(index + 1);
+                else computeResult();
+                isTransitioning = false;
+            }, 260);
+        }
+
+        prevBtn.addEventListener('click', function() {
+            if (isTransitioning || currentQuestion === 0) return;
+            renderQuestion(currentQuestion - 1);
+        });
+
+        function computeResult() {
+            let dimScores = [0, 0, 0, 0],
+                dimCount = [0, 0, 0, 0];
+            for (let i = 0; i < answers.length; i++) {
+                if (answers[i] === null) continue;
+                const dim = questionsData[i].dim;
+                dimScores[dim] += answers[i];
+                dimCount[dim] += 1;
+            }
+            for (let d = 0; d < 4; d++) {
+                const count = dimCount[d];
+                if (count === 0) continue;
+                if (count % 2 === 0 && dimScores[d] === count / 2) {
+                    for (let i = answers.length - 1; i >= 0; i--) {
+                        if (questionsData[i].dim === d && answers[i] !== null) {
+                            dimScores[d] += (answers[i] === 1) ? 1 : 0;
+                            break;
+                        }
+                    }
+                }
+            }
+            let dimTypes = ['', '', '', ''];
+            let dimRatios = [0, 0, 0, 0];
+            for (let d = 0; d < 4; d++) {
+                const score = dimScores[d],
+                    count = dimCount[d];
+                if (count === 0) { dimTypes[d] = '0';
+                    dimRatios[d] = 0.5; } else { dimTypes[d] = (score > count - score) ? '1' : '0';
+                    dimRatios[d] = Math.max(score, count - score) / count; }
+            }
+            const typeCode = dimTypes.join('');
+            const data = resultsData[typeCode] || resultsData["0000"];
+            const cpChar = data.cp;
+            const avgRatio = (dimRatios[0] + dimRatios[1] + dimRatios[2] + dimRatios[3]) / 4;
+            const matchPercent = Math.round(avgRatio * 100);
+
+            lastResultData = { data, cpChar, matchPercent, dimScores, dimTypes, typeCode };
+            isResultPage = true;
+            updateResultDisplay(lastResultData);
+
+            showResult();
+            const pct = 100;
+            progressBar.style.width = pct + '%';
+            progressText.textContent = totalQ;
+            progressPercent.textContent = pct + '%';
+            const lang = currentLang;
+            const t = ui[lang];
+            progressLabel.innerHTML = t.progressLabel.replace('{0}', totalQ);
+
+            // 上报数据
+            if (cloudReady && db && userInfo.age) {
+                const reportData = {
+                    version: 'foreign',
+                    lang: currentLang,
+                    age: userInfo.age,
+                    country: userInfo.country || '',
+                    duration: userInfo.duration || '',
+                    visited: userInfo.visited || '',
+                    ei_score: dimScores[0],
+                    sn_score: dimScores[1],
+                    tf_score: dimScores[2],
+                    jp_score: dimScores[3],
+                    ei_type: dimTypes[0] === '1' ? 'E' : 'I',
+                    sn_type: dimTypes[1] === '1' ? 'S' : 'N',
+                    tf_type: dimTypes[2] === '1' ? 'T' : 'F',
+                    jp_type: dimTypes[3] === '1' ? 'J' : 'P',
+                    mbti_type: typeCode,
+                    mbti_char: data.char,
+                    mbti_title: data.title['zh'],
+                    cp_char: cpChar,
+                    match_percent: matchPercent,
+                    submitted_at: new Date().toISOString()
+                };
+                db.collection('results').add(reportData).then(res => console.log('✅ Data saved', res)).catch(err => {
+                    console.error('❌ Save failed', err);
+                    try {
+                        const failed = JSON.parse(localStorage.getItem('failed_reports') || '[]');
+                        failed.push(reportData);
+                        localStorage.setItem('failed_reports', JSON.stringify(failed));
+                    } catch (e) {}
+                });
+            } else {
+                console.warn('⚠️ CloudBase not connected');
+            }
+        }
+
+        // ===== 更新结果展示 =====
+        function updateResultDisplay(result) {
+            const { data, cpChar, matchPercent } = result;
+            const lang = currentLang;
+            const t = ui[lang];
+
+            document.getElementById('rChar').textContent = data.char;
+            document.getElementById('rTitle').textContent = getLangText(data.title);
+            document.getElementById('rDesc').textContent = getLangText(data.desc);
+            document.getElementById('rPhrase').textContent = getLangText(data.phrase);
+            document.getElementById('rFood').textContent = getLangText(data.food);
+            document.getElementById('rPlace').textContent = getLangText(data.place);
+            document.getElementById('rCpChar').textContent = cpChar;
+            document.getElementById('rCpDesc').textContent = getLangText(cpDescriptions[cpChar] || { zh: '完美的灵魂搭档',
+                en: 'Perfect soulmate' });
+            document.getElementById('resultCharDisplay').textContent = data.char;
+            document.getElementById('resultLandmarkDisplay').innerHTML = `${t.landmarkLabel}<br>${getLangText(data.place)}`;
+
+            document.getElementById('matchCharLabel').textContent = data.char;
+            document.getElementById('matchPercent').textContent = matchPercent + '%';
+            document.getElementById('matchLabel').innerHTML = t.matchLabel.replace('{0}', data.char);
+
+            // 更新 meta 标签
+            document.getElementById('metaPhrase').innerHTML = t.metaPhrase + ' <span id="rPhrase">' + getLangText(data
+                .phrase) + '</span>';
+            document.getElementById('metaFood').innerHTML = t.metaFood + ' <span id="rFood">' + getLangText(data.food) +
+                '</span>';
+            document.getElementById('metaPlace').innerHTML = t.metaPlace + ' <span id="rPlace">' + getLangText(data.place) +
+                '</span>';
+
+            const barFill = document.getElementById('matchBarFill');
+            barFill.className = 'match-bar-fill';
+            if (matchPercent >= 75) barFill.classList.add('high');
+            else if (matchPercent >= 50) barFill.classList.add('mid');
+            else barFill.classList.add('low');
+            setTimeout(() => { barFill.style.width = matchPercent + '%'; }, 200);
+        }
+
+        // ============================================================
+        //  🌐 切换语言（核心修复：所有内容实时切换）
+        // ============================================================
+        function switchLanguage(lang) {
+            currentLang = lang;
+            const t = ui[lang];
+
+            // 1. 头部
+            document.getElementById('mainTitle').innerHTML = t.title;
+            document.getElementById('mainSub').textContent = t.subtitle;
+
+            // 2. 信息页
+            document.getElementById('infoTitle').textContent = t.infoTitle;
+            document.getElementById('infoSub').textContent = t.infoSub;
+            document.getElementById('labelAge').innerHTML = t.labelAge + ' <span class="required">*</span>';
+            document.getElementById('labelCountry').innerHTML = t.labelCountry + ' <span class="required">*</span>';
+            document.getElementById('labelDuration').innerHTML = t.labelDuration + ' <span class="required">*</span>';
+            document.getElementById('labelVisit').innerHTML = t.labelVisit + ' <span class="required">*</span>';
+            document.getElementById('optSelect').textContent = t.optSelect;
+            document.getElementById('opt1').textContent = t.opt1;
+            document.getElementById('opt2').textContent = t.opt2;
+            document.getElementById('opt3').textContent = t.opt3;
+            document.getElementById('opt4').textContent = t.opt4;
+            document.getElementById('opt5').textContent = t.opt5;
+            document.getElementById('visitSelect').textContent = t.visitSelect;
+            document.getElementById('visitYes').textContent = t.visitYes;
+            document.getElementById('visitNo').textContent = t.visitNo;
+            document.getElementById('startBtn').textContent = t.startBtn;
+
+            // 3. 进度条
+            const currentDone = parseInt(progressText.textContent) || 0;
+            progressLabel.innerHTML = t.progressLabel.replace('{0}', currentDone);
+
+            // 4. 题目区（核心修复）
+            if (!qArea.classList.contains('hidden') && currentQuestion >= 0 && currentQuestion < totalQ) {
+                renderQuestion(currentQuestion);
+            }
+
+            // 5. 结果页
+            document.getElementById('resultBadge').textContent = t.resultBadge;
+            document.getElementById('cpLabel').textContent = t.cpLabel;
+            document.getElementById('shareHint').textContent = t.shareHint;
+            document.getElementById('shareBtn').textContent = t.shareBtn;
+            document.getElementById('retryBtn').textContent = t.retryBtn;
+            document.getElementById('footerNote').textContent = t.footer;
+            document.getElementById('resultLandmarkDisplay').innerHTML = t.landmarkLabel + '<br>coming soon';
+
+            if (!rArea.classList.contains('hidden') && lastResultData) {
+                updateResultDisplay(lastResultData);
+            }
+
+            // 6. 语言切换按钮样式
+            const track = document.getElementById('toggleTrack');
+            const zhLabel = document.getElementById('langLabelZh');
+            const enLabel = document.getElementById('langLabelEn');
+            if (lang === 'zh') {
+                track.classList.remove('en');
+                zhLabel.classList.add('active');
+                enLabel.classList.remove('active');
+            } else {
+                track.classList.add('en');
+                enLabel.classList.add('active');
+                zhLabel.classList.remove('active');
+            }
+        }
+
+        // ===== 语言切换按钮事件 =====
+        document.getElementById('langToggle').addEventListener('click', function() {
+            const newLang = currentLang === 'zh' ? 'en' : 'zh';
+            switchLanguage(newLang);
+        });
+
+        // ===== 开始按钮 =====
+        document.getElementById('startBtn').addEventListener('click', function() {
+            const age = document.getElementById('userAge').value;
+            const country = document.getElementById('userCountry').value.trim();
+            const duration = document.getElementById('userDuration').value;
+            const visit = document.getElementById('userVisit').value;
+            if (!age || !country || !duration || !visit) {
+                const msg = currentLang === 'zh' ? '请完整填写所有信息～' : 'Please fill in all required fields～';
+                alert(msg);
+                return;
+            }
+            if (parseInt(age) < 10 || parseInt(age) > 99) {
+                const msg = currentLang === 'zh' ? '请输入有效年龄（10-99岁）' : 'Please enter a valid age (10-99)';
+                alert(msg);
+                return;
+            }
+            userInfo = { age: parseInt(age), country, duration, visited: visit };
+            answers = new Array(totalQ).fill(null);
+            currentQuestion = 0;
+            isResultPage = false;
+            showQuestion();
+            renderQuestion(0);
+        });
+
+        // ===== 分享卡片 =====
+        document.getElementById('shareBtn').addEventListener('click', function() {
+            const card = document.getElementById('shareCard');
+            const btn = this;
+            btn.textContent = '⏳ Generating...';
+            btn.disabled = true;
+            html2canvas(card, { scale: 2, backgroundColor: '#ffffff', useCORS: true, allowTaint: true, logging: false,
+                    width: card.scrollWidth, height: card.scrollHeight })
+                .then(canvas => {
+                    const link = document.createElement('a');
+                    const charName = document.getElementById('rChar').textContent || '津';
+                    link.download = `TianjinCharacter_${charName}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                    btn.textContent = '📸 Save Share Card';
+                    btn.disabled = false;
+                }).catch(err => {
+                    alert('生成失败，请截图保存：' + err.message);
+                    btn.textContent = '📸 Save Share Card';
+                    btn.disabled = false;
+                });
+        });
+
+        // ===== 补报缓存 =====
+        function retryFailedReports() {
+            if (!cloudReady || !db) return;
+            try {
+                const failed = JSON.parse(localStorage.getItem('failed_reports') || '[]');
+                if (failed.length === 0) return;
+                console.log(`🔄 Retrying ${failed.length} cached reports...`);
+                const toRetry = [...failed];
+                let successCount = 0;
+                toRetry.forEach((item, idx) => {
+                    db.collection('results').add(item).then(() => {
+                        successCount++;
+                        if (successCount === toRetry.length) {
+                            localStorage.removeItem('failed_reports');
+                            console.log('✅ All cached reports sent');
+                        }
+                    }).catch(err => console.warn(`Retry ${idx+1} failed`, err));
+                });
+            } catch (e) { console.warn('Retry failed', e); }
+        }
+        setTimeout(retryFailedReports, 3000);
+
+        // ===== 启动 =====
+        switchLanguage('en');
+        showInfo();
+    </script>
+</body>
+</html>
