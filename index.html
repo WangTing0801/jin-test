@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-    <title>测测你的津字人格</title>
+    <title>测测你的津字人格 · 中国学生版</title>
 
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
     </script>
- <script src="https://static.cloudbase.net/cloudbase-js-sdk/2.8.0/cloudbase.full.js">
-</script>
+    <script src="https://static.cloudbase.net/cloudbase-js-sdk/2.8.0/cloudbase.full.js">
+    </script>
+
     <style>
         /* ===== 导入柔和字体 ===== */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&display=swap');
@@ -41,7 +42,87 @@
             position: relative;
             transition: all 0.3s;
             border: 1px solid rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(2px);
+        }
+
+        /* ===== 入口选择页 ===== */
+        .entry-box {
+            text-align: center;
+            padding: 20px 0 10px;
+        }
+        .entry-box .entry-title {
+            font-size: 26px;
+            font-weight: 900;
+            color: #1a1a2e;
+            line-height: 1.3;
+        }
+        .entry-box .entry-title .highlight {
+            color: #c0392b;
+        }
+        .entry-box .entry-sub {
+            color: #8e8e93;
+            font-size: 14px;
+            margin: 8px 0 28px 0;
+        }
+        .entry-options {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+        .entry-option {
+            background: #f8f6f2;
+            border: 2px solid transparent;
+            border-radius: 24px;
+            padding: 20px 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .entry-option:hover {
+            border-color: #c0392b;
+            background: #fdf6f3;
+        }
+        .entry-option:active {
+            transform: scale(0.97);
+        }
+        .entry-option .e-icon {
+            font-size: 36px;
+            width: 52px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .entry-option .e-info {
+            flex: 1;
+        }
+        .entry-option .e-info .e-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+        .entry-option .e-info .e-desc {
+            font-size: 14px;
+            color: #8e8e93;
+            margin-top: 2px;
+        }
+        .entry-option .e-arrow {
+            font-size: 20px;
+            color: #c0392b;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+        .entry-option:hover .e-arrow {
+            opacity: 1;
+        }
+        .entry-option .e-badge {
+            font-size: 11px;
+            background: #fdebd0;
+            color: #c0392b;
+            padding: 2px 12px;
+            border-radius: 40px;
+            font-weight: 600;
         }
 
         /* ===== 头部 ===== */
@@ -73,85 +154,6 @@
             border-bottom: 1px solid #f0ede8;
             font-weight: 400;
             letter-spacing: 0.5px;
-        }
-
-        /* ===== 首页 - 版本选择 ===== */
-        .version-box {
-            padding: 4px 0;
-            text-align: center;
-        }
-        .version-box .q-text {
-            font-size: 18px;
-            font-weight: 500;
-            margin-bottom: 6px;
-        }
-        .version-box .q-text small {
-            display: block;
-            font-size: 14px;
-            font-weight: 400;
-            color: #8e8e93;
-            margin-top: 4px;
-        }
-        .version-options {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin: 18px 0 24px;
-        }
-        .version-option {
-            background: #f8f6f2;
-            border: 2px solid transparent;
-            border-radius: 20px;
-            padding: 16px 20px;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            text-align: left;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-        .version-option:active {
-            transform: scale(0.97);
-        }
-        .version-option .v-icon {
-            font-size: 28px;
-            width: 44px;
-            text-align: center;
-            flex-shrink: 0;
-        }
-        .version-option .v-info {
-            flex: 1;
-        }
-        .version-option .v-info .v-name {
-            font-size: 17px;
-            font-weight: 600;
-            color: #1a1a2e;
-        }
-        .version-option .v-info .v-desc {
-            font-size: 13px;
-            color: #8e8e93;
-            margin-top: 2px;
-        }
-        .version-option .v-badge {
-            font-size: 12px;
-            background: #e0ddd8;
-            color: #6e6e73;
-            padding: 2px 14px;
-            border-radius: 40px;
-            font-weight: 600;
-            flex-shrink: 0;
-        }
-        .version-option .v-badge.coming {
-            background: #fdebd0;
-            color: #c0392b;
-        }
-        .version-option.selected {
-            border-color: #c0392b;
-            background: #fdf6f3;
-        }
-        .version-option.selected .v-badge {
-            background: #c0392b;
-            color: white;
         }
 
         /* ===== 信息收集页 ===== */
@@ -237,9 +239,6 @@
         }
 
         /* ===== 题目区 ===== */
-        .question-fade {
-            animation: fadeIn 0.3s ease;
-        }
         @keyframes fadeIn {
             0% {
                 opacity: 0.5;
@@ -284,7 +283,6 @@
             line-height: 1.5;
             position: relative;
             user-select: none;
-            -webkit-tap-highlight-color: transparent;
             display: flex;
             align-items: center;
             gap: 14px;
@@ -321,17 +319,8 @@
             color: #c0392b;
             font-weight: 500;
         }
-        .option.disabled-tap {
-            pointer-events: none;
-            opacity: 0.6;
-        }
 
         /* ===== 按钮 ===== */
-        .btn-group {
-            display: flex;
-            gap: 12px;
-            margin-top: 8px;
-        }
         .btn {
             padding: 14px 24px;
             font-size: 16px;
@@ -382,54 +371,6 @@
             background: #f5f2ed;
             border-radius: 40px;
         }
-
-        /* ===== 结果页按钮（浅色版） ===== */
-        .share-btn {
-            width: 100%;
-            background: #fdf6f3;
-            color: #c0392b;
-            border: 2px solid #fdebd0;
-            border-radius: 40px;
-            padding: 14px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            margin-top: 12px;
-            letter-spacing: 0.5px;
-            font-family: inherit;
-        }
-        .share-btn:active {
-            transform: scale(0.97);
-        }
-        .share-btn:hover {
-            background: #fdebd0;
-            border-color: #c0392b;
-        }
-
-        .btn-retry {
-            width: 100%;
-            background: #f8f6f2;
-            color: #6e6e73;
-            border: 2px solid #edebe7;
-            border-radius: 40px;
-            padding: 14px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            margin-top: 10px;
-            letter-spacing: 0.5px;
-            font-family: inherit;
-        }
-        .btn-retry:active {
-            transform: scale(0.97);
-        }
-        .btn-retry:hover {
-            background: #edebe7;
-            border-color: #d5d0c8;
-        }
-
         .w-full {
             width: 100%;
         }
@@ -636,6 +577,51 @@
             letter-spacing: 0.5px;
         }
 
+        .share-btn {
+            width: 100%;
+            background: #fdf6f3;
+            color: #c0392b;
+            border: 2px solid #fdebd0;
+            border-radius: 40px;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            margin-top: 12px;
+            letter-spacing: 0.5px;
+            font-family: inherit;
+        }
+        .share-btn:active {
+            transform: scale(0.97);
+        }
+        .share-btn:hover {
+            background: #fdebd0;
+            border-color: #c0392b;
+        }
+
+        .btn-retry {
+            width: 100%;
+            background: #f8f6f2;
+            color: #6e6e73;
+            border: 2px solid #edebe7;
+            border-radius: 40px;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
+            font-family: inherit;
+        }
+        .btn-retry:active {
+            transform: scale(0.97);
+        }
+        .btn-retry:hover {
+            background: #edebe7;
+            border-color: #d5d0c8;
+        }
         .mt-12 {
             margin-top: 12px;
         }
@@ -644,196 +630,140 @@
 <body>
 
     <div class="container" id="app">
-        <!-- ===== 头部 ===== -->
-       
-        <h1>测测你的<span class="highlight">津字</span>人格</h1>
-        <div class="subtitle">九河下梢 · 人间烟火</div>
 
-        <!-- ===== 进度条 ===== -->
-        <div id="progressArea" class="hidden">
-            <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
-            <div class="progress-label">
-                <span>🚢 已航行 <span class="highlight" id="progressText">0</span> / 30海里</span>
-                <span id="progressPercent">0%</span>
+        <!-- ========================================================= -->
+        <!--  入口选择页（默认显示）                                   -->
+        <!-- ========================================================= -->
+        <div id="entryPanel">
+            <div class="entry-box">
+                <div class="entry-title">
+                    🏮 测测你的<span class="highlight">津字</span>人格
+                </div>
+                <div class="entry-sub">九河下梢 · 人间烟火 · 选择你的版本</div>
+                <div class="entry-options">
+                    <div class="entry-option" id="goCn">
+                        <div class="e-icon">🇨🇳</div>
+                        <div class="e-info">
+                            <div class="e-name">中国学生版</div>
+                            <div class="e-desc">面向在中国大陆就读的学生 · 纯中文</div>
+                        </div>
+                        <div class="e-arrow">→</div>
+                    </div>
+                    <div class="entry-option" id="goForeign">
+                        <div class="e-icon">🌏</div>
+                        <div class="e-info">
+                            <div class="e-name">留学生版</div>
+                            <div class="e-desc">面向来华留学生 · 中英双语切换</div>
+                        </div>
+                        <div class="e-badge">NEW</div>
+                        <div class="e-arrow">→</div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- ========================================================= -->
-        <!--  首页                                                   -->
+        <!--  中国学生版（由 entryPanel 切换显示）                     -->
         <!-- ========================================================= -->
-        <div id="homePanel">
-            <div class="version-box">
+        <div id="cnPanel" class="hidden">
+
+            <!-- 头部 -->
+            <h1>测测你的<span class="highlight">津字</span>人格</h1>
+            <div class="subtitle">九河下梢 · 人间烟火</div>
+
+            <!-- 进度条 -->
+            <div id="progressAreaCn" class="hidden">
+                <div class="progress-wrap"><div class="progress-bar" id="progressBarCn"></div></div>
+                <div class="progress-label">
+                    <span>🚢 已航行 <span class="highlight" id="progressTextCn">0</span> / 30 海里</span>
+                    <span id="progressPercentCn">0%</span>
+                </div>
+            </div>
+
+            <!-- 信息收集 -->
+            <div id="infoPanelCn" class="info-box hidden">
                 <div class="q-text">
-                    🎯 选择你的身份
-                    <small>不同身份将匹配不同的测试内容</small>
+                    <div>📋 认识一下~</div>
+                    <small>数据仅用于学术研究 · 完全匿名</small>
                 </div>
-                <div class="version-options">
-                    <div class="version-option selected" data-version="cn" id="optCn">
-                        <div class="v-icon">🇨🇳</div>
-                        <div class="v-info">
-                            <div class="v-name">中国学生</div>
-                            <div class="v-desc">面向在中国大陆就读的学生</div>
+                <div class="field-group">
+                    <div>
+                        <div class="field-label">年龄 <span class="required">*</span></div>
+                        <input type="number" id="cnAge" placeholder="请输入年龄" min="10" max="99">
+                    </div>
+                    <div>
+                        <div class="field-label">地区 <span class="required">*</span></div>
+                        <input type="text" id="cnRegion" placeholder="如：天津、北京、山东济南">
+                    </div>
+                    <div>
+                        <div class="field-label">专业 <span class="required">*</span></div>
+                        <input type="text" id="cnMajor" placeholder="如：心理学、计算机、经济学">
+                    </div>
+                    <div>
+                        <div class="field-label">年级 <span class="required">*</span></div>
+                        <select id="cnGrade">
+                            <option value="">请选择</option>
+                            <option value="大一">大一</option>
+                            <option value="大二">大二</option>
+                            <option value="大三">大三</option>
+                            <option value="大四">大四</option>
+                            <option value="研究生">研究生</option>
+                            <option value="其他">其他</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-primary w-full" id="startCnBtn">开始测试 →</button>
+                <button class="btn btn-secondary w-full mt-10" id="backHomeCnBtn">← 返回</button>
+            </div>
+
+            <!-- 题目区 -->
+            <div id="questionAreaCn" class="hidden">
+                <div class="q-number" id="qNumberCn">第 1 / 30 题</div>
+                <div class="q-text" id="qTextCn">加载中...</div>
+                <div id="optionsBoxCn" class="options"></div>
+                <div class="flex-center">
+                    <button class="btn btn-back" id="prevBtnCn" disabled>← 上一题</button>
+                </div>
+            </div>
+
+            <!-- 结果页 -->
+            <div id="resultAreaCn" class="result-box hidden">
+                <div id="shareCardCn">
+                    <div class="result-badge">你的津字人格是：</div>
+                    <div class="result-art">
+                        <div class="char-area" id="resultCharCn">津</div>
+                        <div class="landmark-area" id="resultLandmarkCn">🏛️ 地标<br>（待放图）</div>
+                    </div>
+                    <div class="result-char" id="rCharCn">漕</div>
+                    <div class="result-title" id="rTitleCn">执规者</div>
+                    <div class="result-desc" id="rDescCn">描述加载中...</div>
+                    <div class="match-section">
+                        <div class="match-header">
+                            <div class="match-label">🎯 匹配度 · 你与 <span id="matchCharCn">津</span> 的契合程度</div>
+                            <div class="match-number" id="matchPercentCn">0%</div>
                         </div>
-                        <div class="v-badge">✓ 已选</div>
-                    </div>
-                    <div class="version-option" data-version="foreign" id="optForeign">
-                        <div class="v-icon">🌏</div>
-                        <div class="v-info">
-                            <div class="v-name">留学生</div>
-                            <div class="v-desc">面向来华留学生 · 海外中文学习者</div>
+                        <div class="match-bar-wrap">
+                            <div class="match-bar-fill" id="matchBarCn" style="width:0%;"></div>
                         </div>
-                        <div class="v-badge coming">开发中</div>
+                    </div>
+                    <div class="result-cp">
+                        💞 你最配的津字是：<span class="cp-char" id="rCpCharCn">海</span>
+                        <div class="cp-desc" id="rCpDescCn">加载中...</div>
+                        <div class="share-hint">📤 分享给朋友，看看 TA 是不是你的 CP 字</div>
+                    </div>
+                    <div class="result-meta">
+                        <div>津选口头禅：<span id="rPhraseCn">---</span></div>
+                        <div style="margin-top:6px;">津味之选：<span id="rFoodCn">---</span></div>
+                        <div style="margin-top:6px;">灵魂地标：<span id="rPlaceCn">---</span></div>
                     </div>
                 </div>
-                <button class="btn btn-primary w-full" id="enterInfoBtn">下一步 </button>
+                <button class="share-btn" id="shareBtnCn">📸 保存分享卡片</button>
+                <button class="btn-retry" onclick="location.reload()">🔄 再测一次</button>
             </div>
+
+            <div class="footer-note">— 测测你的津字人格 —</div>
         </div>
 
-        <!-- ========================================================= -->
-        <!--  中国学生版信息收集                                       -->
-        <!-- ========================================================= -->
-        <div id="infoPanelCn" class="info-box hidden">
-            <div class="q-text">
-                <div>📋 </div>
-               <div>认识一下~</div> 
-                <small>数据仅用于学术研究 · 完全匿名</small>
-            </div>
-            <div class="field-group">
-                <div>
-                    <div class="field-label">年龄 <span class="required">*</span></div>
-                    <input type="number" id="cnAge" placeholder="请输入年龄" min="10" max="99">
-                </div>
-                <div>
-                    <div class="field-label">地区 <span class="required">*</span></div>
-                    <input type="text" id="cnRegion" placeholder="如：天津、北京、山东济南">
-                </div>
-                <div>
-                    <div class="field-label">专业 <span class="required">*</span></div>
-                    <input type="text" id="cnMajor" placeholder="如：心理学、计算机、经济学">
-                </div>
-                <div>
-                    <div class="field-label">年级 <span class="required">*</span></div>
-                    <select id="cnGrade">
-                        <option value="">请选择</option>
-                        <option value="大一">大一</option>
-                        <option value="大二">大二</option>
-                        <option value="大三">大三</option>
-                        <option value="大四">大四</option>
-                        <option value="研究生">研究生</option>
-                        <option value="其他">其他</option>
-                    </select>
-                </div>
-            </div>
-            <button class="btn btn-primary w-full" id="startCnBtn">开始测试 </button>
-            <button class="btn btn-secondary w-full mt-10" id="backHomeCnBtn">返回</button>
-        </div>
-
-        <!-- ========================================================= -->
-        <!--  留学生版信息收集（开发中）                               -->
-        <!-- ========================================================= -->
-        <div id="infoPanelForeign" class="info-box hidden">
-            <div class="q-text">
-                🌏 留学生信息
-                <small>本版本正在开发中 · 敬请期待</small>
-            </div>
-            <div class="field-group">
-                <div>
-                    <div class="field-label">年龄 <span class="required">*</span></div>
-                    <input type="number" id="foreignAge" placeholder="请输入年龄" min="10" max="99">
-                </div>
-                <div>
-                    <div class="field-label">学习中文时间 <span class="required">*</span></div>
-                    <select id="foreignDuration">
-                        <option value="">请选择</option>
-                        <option value="少于6个月">少于6个月</option>
-                        <option value="6个月-1年">6个月-1年</option>
-                        <option value="1-2年">1-2年</option>
-                        <option value="2-3年">2-3年</option>
-                        <option value="3年以上">3年以上</option>
-                    </select>
-                </div>
-                <div>
-                    <div class="field-label">是否来中国学过中文 <span class="required">*</span></div>
-                    <select id="foreignVisit">
-                        <option value="">请选择</option>
-                        <option value="是，来过">是，来过</option>
-                        <option value="否，没来过">否，没来过</option>
-                    </select>
-                </div>
-                <div>
-                    <div class="field-label">HSK水平（选填）</div>
-                    <select id="foreignHsk">
-                        <option value="">请选择</option>
-                        <option value="HSK1">HSK 1级</option>
-                        <option value="HSK2">HSK 2级</option>
-                        <option value="HSK3">HSK 3级</option>
-                        <option value="HSK4">HSK 4级</option>
-                        <option value="HSK5">HSK 5级</option>
-                        <option value="HSK6">HSK 6级</option>
-                        <option value="未考级">未考级</option>
-                    </select>
-                </div>
-            </div>
-            <button class="btn btn-primary w-full" disabled style="opacity:0.5;cursor:not-allowed;">🚧 开发中</button>
-            <button class="btn btn-secondary w-full mt-10" id="backHomeForeignBtn">← 返回</button>
-        </div>
-
-        <!-- ========================================================= -->
-        <!--  题目区                                                  -->
-        <!-- ========================================================= -->
-        <div id="questionArea" class="hidden">
-            <div class="q-number" id="qNumber">第 1 / 30 题</div>
-            <div class="q-text" id="qText">加载中...</div>
-            <div id="optionsBox" class="options"></div>
-            <div class="flex-center">
-                <button class="btn btn-back" id="prevBtn" disabled>← 上一题</button>
-            </div>
-        </div>
-
-        <!-- ========================================================= -->
-        <!--  结果页                                                  -->
-        <!-- ========================================================= -->
-        <div id="resultArea" class="result-box hidden">
-            <div id="shareCard">
-                <div class="result-badge">你的津字人格是：</div>
-                <div class="result-art">
-                    <div class="char-area" id="resultCharDisplay">津</div>
-                    <div class="landmark-area" id="resultLandmarkDisplay">🏛️ 地标<br>（待放图）</div>
-                </div>
-                <div class="result-char" id="rChar">漕</div>
-                <div class="result-title" id="rTitle">执规者</div>
-                <div class="result-desc" id="rDesc">描述加载中...</div>
-
-                <!-- ===== 匹配度进度条 ===== -->
-                <div class="match-section" id="matchSection">
-                    <div class="match-header">
-                        <div class="match-label">🎯 匹配度 · 你与 <span id="matchCharLabel">津</span> 的契合程度</div>
-                        <div class="match-number" id="matchPercent">0%</div>
-                    </div>
-                    <div class="match-bar-wrap">
-                        <div class="match-bar-fill" id="matchBarFill" style="width:0%;"></div>
-                    </div>
-                </div>
-
-                <div class="result-cp">
-                    💞 你最配的津字是：<span class="cp-char" id="rCpChar">海</span>
-                    <div class="cp-desc" id="rCpDesc">加载中...</div>
-                    <div class="share-hint">📤 分享给朋友，看看 TA 是不是你的 CP 字</div>
-                </div>
-                <div class="result-meta" id="rMeta">
-                    <div>津选口头禅：<span id="rPhrase">---</span></div>
-                    <div style="margin-top:6px;">津味之选：<span id="rFood">---</span></div>
-                    <div style="margin-top:6px;">灵魂地标：<span id="rPlace">---</span></div>
-                </div>
-               
-            </div>
-
-            <!-- ===== 浅色按钮 ===== -->
-            <button class="share-btn" id="shareBtn">📸 保存分享卡片</button>
-            <button class="btn-retry" onclick="location.reload()"> 再测一次</button>
-        </div>
-
-        <div class="footer-note">— 测测你的津字人格 —</div>
     </div>
 
     <script>
@@ -845,8 +775,8 @@
         try {
             if (typeof cloudbase !== 'undefined' && cloudbase.init) {
                 const app = cloudbase.init({
-                    env: 'jin-personality-d0fxwmgc4c28cd06',
-                     region: 'ap-shanghai'  // 加上地域
+                    env: 'jin-personality-d0fxwmg4c28cd06',
+                    region: 'ap-shanghai'
                 });
                 db = app.database();
                 cloudReady = true;
@@ -859,318 +789,186 @@
         }
 
         // ============================================================
-        //  📊 数据
+        //  入口切换逻辑
         // ============================================================
-        const questions = [
-            { q: "去西北角吃早点，面对排到街角的长队，你会？", dim: 0, a: "默默低头刷手机，安静等待", b: "忍不住探头搭话：\"介得排到嘛时候？\"" },
-            { q: "老板临时通知周末团建去蓟州爬山，你第一反应是？", dim: 0, a: "内心毫无波澜，想请假回家躺着", b: "立刻热血上头，开始张罗零食歌单" },
-            { q: "刷短视频看到有人\"黑\"天津，你会？", dim: 0, a: "心里不舒服，划过去眼不见为净", b: "必须点开评论区，敲字跟对方掰扯" },
+        document.getElementById('goCn').addEventListener('click', function() {
+            document.getElementById('entryPanel').classList.add('hidden');
+            document.getElementById('cnPanel').classList.remove('hidden');
+            initCn();
+        });
+
+        document.getElementById('goForeign').addEventListener('click', function() {
+            // 跳转到 foreign.html
+            window.location.href = '/foreign.html';
+        });
+
+        // ============================================================
+        //  📊 中国学生版数据
+        // ============================================================
+        const questionsCn = [
+            { q: "去西北角吃早点，面对排到街角的长队，你会？", dim: 0, a: "默默低头刷手机，安静等待",
+            b: "忍不住探头搭话：\"介得排到嘛时候？\"" },
+            { q: "老板临时通知周末团建去蓟州爬山，你第一反应是？", dim: 0, a: "内心毫无波澜，想请假回家躺着",
+            b: "立刻热血上头，开始张罗零食歌单" },
+            { q: "刷短视频看到有人\"黑\"天津，你会？", dim: 0, a: "心里不舒服，划过去眼不见为净",
+            b: "必须点开评论区，敲字跟对方掰扯" },
             { q: "傍晚在民园广场散步，你更喜欢？", dim: 0, a: "找长椅坐着，看来往人群发呆", b: "跟着音乐扭两下，或加入踢毽子人群" },
             { q: "发一条关于天津的朋友圈，你通常是？", dim: 0, a: "只发九宫格，配文极简", b: "配上小作文，再加几个表情包" },
             { q: "去名流茶馆听相声，你更享受哪种状态？", dim: 0, a: "台下眯着眼，品味捧逗门道", b: "台下扯嗓子喊\"吁~\"，跟着起哄" },
             { q: "新搬到一个天津老小区，你会？", dim: 0, a: "先观察几天，不主动打招呼", b: "当天就把对门楼上楼下混熟" },
-            { q: "你心中\"天津卫的老例儿\"，最重要的是？", dim: 1, a: "嘛事儿都讲先来后到，加塞儿不行", b: "人与人得讲面儿，得饶人处且饶人" },
+            { q: "你心中\"天津卫的老例儿\"，最重要的是？", dim: 1, a: "嘛事儿都讲先来后到，加塞儿不行",
+            b: "人与人得讲面儿，得饶人处且饶人" },
             { q: "好朋友借了钱到约定日期没还，你会？", dim: 1, a: "直接开口提醒，亲兄弟明算账", b: "抹不开面儿，暗示两句，不还就当随份子" },
             { q: "玩剧本杀或密室逃脱，你是哪种玩家？", dim: 1, a: "严格遵循线索逻辑，推理严密", b: "看气氛，为了大家体验好，偶尔放水" },
-            { q: "看待去年\"天津大爷跳水\"，你更欣赏哪一点？", dim: 1, a: "自发形成的民间秩序，有人维持", b: "那种不在乎眼光、活出自我的热烈" },
-            { q: "买煎饼果子看到熟客忘带钱，摊主说\"下次再说\"，你想？", dim: 1, a: "摊主不合适，小本买卖没规矩亏本", b: "摊主真局气！天津人就得有人情味儿" },
+            { q: "看待去年\"天津大爷跳水\"，你更欣赏哪一点？", dim: 1, a: "自发形成的民间秩序，有人维持",
+            b: "那种不在乎眼光、活出自我的热烈" },
+            { q: "买煎饼果子看到熟客忘带钱，摊主说\"下次再说\"，你想？", dim: 1, a: "摊主不合适，小本买卖没规矩亏本",
+                b: "摊主真局气！天津人就得有人情味儿" },
             { q: "单位评选优秀员工，你更倾向哪种方式？", dim: 1, a: "严格按KPI数据，谁分高谁上", b: "轮流坐庄，或看谁人缘好帮大家多" },
-            { q: "早高峰开车南京路，旁边车强行并道不打灯，你会？", dim: 1, a: "按喇叭寸步不让，TA违规了你怕嘛", b: "点一脚刹车让他进，多一事不如少一事" },
-            { q: "提到\"杨柳青年画\"，你更喜欢哪种风格？", dim: 2, a: "工笔细腻、胖娃娃抱鲤鱼写实款", b: "色彩大胆、构图奇巧的抽象创新款" },
+            { q: "早高峰开车南京路，旁边车强行并道不打灯，你会？", dim: 1, a: "按喇叭寸步不让，TA违规了你怕嘛",
+                b: "点一脚刹车让他进，多一事不如少一事" },
+            { q: "提到\"杨柳青年画\"，你更喜欢哪种风格？", dim: 2, a: "工笔细腻、胖娃娃抱鲤鱼写实款",
+            b: "色彩大胆、构图奇巧的抽象创新款" },
             { q: "下班后的独处时光，你更愿意？", dim: 2, a: "钻研新菜谱，或修理坏掉的小电器", b: "看科幻电影，或琢磨天马行空的点子" },
             { q: "听别人给你讲大道理，你更看重？", dim: 2, a: "内容有无数据支撑，能否落地", b: "角度是否新颖，有无打开新思路" },
-            { q: "看到\"风筝魏\"的百变风筝，你最惊叹的是？", dim: 2, a: "匠人手上\"扎糊绘放\"的硬功夫", b: "匠人脑子里千奇百怪的奇思妙想" },
+            { q: "看到\"风筝魏\"的百变风筝，你最惊叹的是？", dim: 2, a: "匠人手上\"扎糊绘放\"的硬功夫",
+                b: "匠人脑子里千奇百怪的奇思妙想" },
             { q: "你平时写的日记或备忘录，更偏向于？", dim: 2, a: "吃了嘛、干了嘛的实在流水账", b: "心情起伏、梦到嘛的感悟随笔" },
             { q: "周末去海河边逛一座桥，你会更想去？", dim: 2, a: "结实厚重、百年沧桑的解放桥", b: "造型独特、灯光璀璨的永乐桥" },
             { q: "假如穿越回古代天津卫，你更想当？", dim: 2, a: "踏实勤恳、倒腾米面布匹的船工", b: "周游四方、见多识广的行商" },
-            { q: "朋友突然约你今晚去\"津湾广场\"听音乐会，你会？", dim: 3, a: "先问几点结束，太晚不行，要作息规律", b: "管他几点！到地儿再说，大不了转场撸串" },
-            { q: "看看你现在的工位或书桌，通常是哪种状态？", dim: 3, a: "分门别类井井有条，用完归位", b: "乱中有序，堆满小玩意儿但自己找得到" },
+            { q: "朋友突然约你今晚去\"津湾广场\"听音乐会，你会？", dim: 3, a: "先问几点结束，太晚不行，要作息规律",
+                b: "管他几点！到地儿再说，大不了转场撸串" },
+            { q: "看看你现在的工位或书桌，通常是哪种状态？", dim: 3, a: "分门别类井井有条，用完归位",
+            b: "乱中有序，堆满小玩意儿但自己找得到" },
             { q: "追一部热播剧或连载小说，你习惯怎么追？", dim: 3, a: "攒到全部更新完，一口气刷完", b: "追到哪算哪，甚至找剧透或同人" },
-            { q: "如果你有\"海河夜跑\"的习惯，你的风格是？", dim: 3, a: "规划固定路线，每天跑足5公里", b: "看到卖熟梨糕的就停下来买一份" },
+            { q: "如果你有\"海河夜跑\"的习惯，你的风格是？", dim: 3, a: "规划固定路线，每天跑足5公里",
+                b: "看到卖熟梨糕的就停下来买一份" },
             { q: "平时买衣服或日用品，你更看重？", dim: 3, a: "耐用性和性价比，用个十年八年", b: "是否新奇有趣，体验过就行" },
-            { q: "你更欣赏\"津味相声\"里哪种捧哏风格？", dim: 3, a: "稳重托底，一句\"您说得对\"稳住全场", b: "灵活刁钻，一句话怼得逗哏哑口无言" },
+            { q: "你更欣赏\"津味相声\"里哪种捧哏风格？", dim: 3, a: "稳重托底，一句\"您说得对\"稳住全场",
+                b: "灵活刁钻，一句话怼得逗哏哑口无言" },
             { q: "参加几十人的大型聚会，你通常是？", dim: 3, a: "坐固定位置，跟身边人深度聊天", b: "满场飞，拿着酒杯到处串台" },
             { q: "头一回到\"意大利风情区\"逛，你会怎么玩？", dim: 3, a: "拿地图挨个找标志建筑打卡", b: "不看地图，钻小巷随缘发现惊喜" },
-            { q: "如果必须给外地朋友带一件\"天津特产\"，你会选？", dim: 2, a: "十八街麻花——实在、管饱、名气大", b: "泥人张或杨柳青年画——有艺术感" }
+            { q: "如果必须给外地朋友带一件\"天津特产\"，你会选？", dim: 2, a: "十八街麻花——实在、管饱、名气大",
+                b: "泥人张或杨柳青年画——有艺术感" }
         ];
 
-        // ============================================================
-        //  📊 结果数据 - 完整版
-        // ============================================================
-        const results = {
-            "0000": {
-                char: "漕",
-                title: "执规者",
-                desc: "你是三岔河口最精准的那杆秤。千年漕运的严谨刻进了你的DNA，做事讲究\"程序正义\"，厌恶一切插队和糊弄。在你眼里，规矩不是束缚，而是让万事万物高效运转的魔法。",
-                phrase: "按老例儿来，没毛病！",
-                cp: "直",
-                food: "罾蹦鲤鱼（形态完整、鳞骨酥脆，讲究一丝不苟的火候）",
-                place: "三岔河口（漕运枢纽，秩序之源）"
-            },
-            "0001": {
-                char: "谐",
-                title: "通透者",
-                desc: "静水深流，你是人群中最清醒的旁观者。用\"规矩\"框定自我，用\"幽默\"解构外界。你看透生活的荒诞却不说破，轻描淡写一句\"嘛玩儿意儿\"，就把所有沉重都化作了云淡风轻。",
-                phrase: "嘛玩儿意儿~（淡然不屑版）",
-                cp: "风",
-                food: "茶汤（看似黏糊，实则香甜细腻，入口即化）",
-                place: "名流茶馆（嬉笑怒骂皆成文章）"
-            },
-            "0010": {
-                char: "容",
-                title: "整合者",
-                desc: "你像海河的河床，静默而宽厚。别人只看到碎片，你脑子里却能拼出宏大的\"蓝图画卷\"。你是五方杂处的调停人，能把东西南北的文化资源揉碎了重组，是深藏不露的\"终极谋略家\"。",
-                phrase: "嘛事儿都得盘盘道，急不得。",
-                cp: "海",
-                food: "八大碗（集各路菜系精华于一桌）",
-                place: "广东会馆（四方商贾汇聚于此）"
-            },
-            "0011": {
-                char: "直",
-                title: "实干派",
-                desc: "继承了\"直沽古寨\"的血脉，你信奉\"行动大于言语\"。脑洞虽大，但落地更扎实；手握绝活，心里有算盘。你不玩虚的，再复杂的机器到你手里都能乖乖听话。",
-                phrase: "直接啫！费那事儿干嘛？",
-                cp: "卫",
-                food: "嘎巴菜（把煎饼切碎了泡卤子，用最实在的食材搞出大美味）",
-                place: "天津站世纪钟（精密运转的工业美学）"
-            },
-            "0100": {
-                char: "沽",
-                title: "守望者",
-                desc: "你是七十二沽里一汪温柔的水。念旧、重情、不善言辞，却把对故土和亲朋的深情藏在每一个具体的动作里——帮你收快递、给你留灯、生病时端来一碗热粥。\"最可靠的后盾\"就是你。",
-                phrase: "咱们嘛时候约顿饭啊？（真诚邀请版）",
-                cp: "义",
-                food: "罾蹦鲤鱼（完整形态、鳞骨酥脆，讲究一丝不苟的火候）",
-                place: "海河亲水平台（静静流淌，润物无声）"
-            },
-            "0101": {
-                char: "泥",
-                title: "造梦师",
-                desc: "手上有泥，心中有梦。你像\"泥人张\"一样，善于把细腻到发丝的情感揉捏进作品里。你对外界的悲欢有着超乎常人的敏锐，是浪漫到骨子里的理想主义者，在喧嚣中守护着一座内心的桃花源。",
-                phrase: "我心里有数儿。（轻声细语版）",
-                cp: "画",
-                food: "熟梨糕（造型精巧，米香中透着手艺人的匠心）",
-                place: "泥人张美术馆（指尖有乾坤）"
-            },
-            "0110": {
-                char: "口",
-                title: "百事通",
-                desc: "九河下梢的烟火气养出了你。看着内敛，却把\"人情世故\"摸得门儿清。哪家的煎饼果子加俩鸡蛋最香、哪条小路能躲开早高峰，您了问我就对了。你是天津活着的\"大众点评\"。",
-                phrase: "嘛地方？我门儿清！",
-                cp: "门",
-                food: "熟梨糕（走街串巷的叫卖声，是信息交换的起点）",
-                place: "沈阳道古物市场（三教九流、信息交汇）"
-            },
-            "0111": {
-                char: "渡",
-                title: "引渡人",
-                desc: "你这辈子是来渡人的。极致的共情力让你总能觉察到别人心底的惊涛骇浪，却不动声色地递上一根船桨。你习惯燃烧自己照亮他人的路，是暗夜中最温暖的那座灯塔。",
-                phrase: "没事儿，有哥哥/姐姐我呢。（温柔坚定版）",
-                cp: "沽",
-                food: "杨村糕干（朴实无华，却能在饥饿时救人一命）",
-                place: "天后宫（妈祖庇佑出海人平安归来）"
-            },
-            "1000": {
-                char: "卫",
-                title: "捍卫者",
-                desc: "天生带着\"拱卫京师\"的使命感！你眼里揉不得沙子，\"纪律就是生命线\"。凡事冲在第一线，路见不平一声吼，把\"靠谱\"和\"正义\"两个词刻在了脑门上，是队友最安心的盾牌。",
-                phrase: "好么眼儿的，介算嘛事儿！我来！",
-                cp: "直",
-                food: "锅巴菜（卤子咸香厚重，像极了你给身边人的安全感）",
-                place: "天津鼓楼（晨钟暮鼓，固若金汤）"
-            },
-            "1001": {
-                char: "鼓",
-                title: "燃情者",
-                desc: "你是\"津门法鼓\"里最响的那一槌！精力旺盛到无处安放，走到哪儿就把热闹带到哪儿。你善于用热烈的节奏点燃全场，有你在的局永远不会冷场，是天生的气氛组组长。",
-                phrase: "走起来！别坐着呀！",
-                cp: "风",
-                food: "崩豆张（嘎嘣脆，嚼着带响，吃一口就停不下来）",
-                place: "民园广场（最不缺的就是热闹与人群）"
-            },
-            "1010": {
-                char: "门",
-                title: "破局者",
-                desc: "\"津门\"的气魄在你身上体现得淋漓尽致。你敢于制定规则，更敢于打破陈规。你像解放桥开桥一样，总能找到让巨轮通行的时机，带着队伍跨越天堑，是天生的统帅和变革者。",
-                phrase: "把门开开！咱瞧瞧外头去！",
-                cp: "海",
-                food: "耳朵眼炸糕（外皮酥脆破局，内里甜糯绵密）",
-                place: "解放桥（开启之间，天堑变通途）"
-            },
-            "1011": {
-                char: "风",
-                title: "探险家",
-                desc: "你是\"风筝魏\"手里那只挣脱了线的风筝！满脑子奇思妙想，却又守得住手艺人的底线。没有什么能束缚你，因为风就是你的人生常态——今天在北京，明天可能就在巴黎。",
-                phrase: "无拘无束，嘛也不叫事！",
-                cp: "门",
-                food: "狗不理包子（十八个褶，花样百出，每一口都是惊喜）",
-                place: "天津之眼（升到最高处，俯瞰全世界）"
-            },
-            "1100": {
-                char: "义",
-                title: "热心肠",
-                desc: "\"重实尚义\"四个字就是你的金字招牌。你信奉\"为朋友两肋插刀\"，兜里有十块能给兄弟花八块。最见不得别人受委屈，路见不平必须拔刀相助，是江湖中传说的\"及时雨\"宋江转世。",
-                phrase: "嘛钱不钱的，乐呵乐呵得了！",
-                cp: "沽",
-                food: "老爆三（硬菜、实在、下饭，全是真功夫）",
-                place: "谦祥益保记（相声里的江湖道义）"
-            },
-            "1101": {
-                char: "画",
-                title: "美学匠",
-                desc: "你把日子过成了\"杨柳青年画\"——热烈、饱满、色彩斑斓。你热情似火，审美敏锐，善于在平凡琐碎中发现被忽略的美，随手一拍就是大片，随手一摆就是仪式感。",
-                phrase: "倍儿好看！嘛叫生活？介就叫生活！",
-                cp: "泥",
-                food: "杨村糕干（雪白方正，像一张待涂抹的画布）",
-                place: "杨柳青古镇石家大院（处处是雕梁画栋）"
-            },
-            "1110": {
-                char: "海",
-                title: "号召者",
-                desc: "渤海湾的雄风扑面而来！你天生具备让人追随的魅力，胸怀宽广能容万物。只要你在，风浪就得退避三舍。你是天生的演说家和领航员，一句话就能把散沙凝聚成高塔。",
-                phrase: "跟我走，没错儿！出了事算我的！",
-                cp: "门",
-                food: "煎饼果子（包容万物，鸡蛋、馃子、馃篦儿都能往里加）",
-                place: "滨海新区妈祖像（面朝大海，庇佑万民）"
-            },
-            "1111": {
-                char: "津",
-                title: "摆渡者",
-                desc: "你就是\"天子渡口\"那艘最灵动的船！热情、仗义、浪漫、随性，所有讨喜的因子你全占了。你仿佛天生就知道如何连接人与机遇，你在哪里，哪里就是欢乐和财富的交汇点。",
-                phrase: "倍儿哏儿！嘛都不是事儿！",
-                cp: "海",
-                food: "狗不理包子 + 耳朵眼炸糕 + 十八街麻花（天津三绝全包圆）",
-                place: "海河游船（日夜穿梭，连接两岸繁华）"
-            }
+        const resultsCn = {
+            "0000": { char: "漕", title: "执规者",
+                desc: "你是三岔河口最精准的那杆秤。千年漕运的严谨刻进了你的DNA，做事讲究\"程序正义\"，厌恶一切插队和糊弄。",
+                phrase: "按老例儿来，没毛病！", cp: "直", food: "罾蹦鲤鱼", place: "三岔河口" },
+            "0001": { char: "谐", title: "通透者",
+                desc: "静水深流，你是人群中最清醒的旁观者。用\"规矩\"框定自我，用\"幽默\"解构外界。你看透生活的荒诞却不说破。",
+                phrase: "嘛玩儿意儿~", cp: "风", food: "茶汤", place: "名流茶馆" },
+            "0010": { char: "容", title: "整合者",
+                desc: "你像海河的河床，静默而宽厚。别人只看到碎片，你脑子里却能拼出宏大的\"蓝图画卷\"。", phrase: "嘛事儿都得盘盘道，急不得。",
+                cp: "海", food: "八大碗", place: "广东会馆" },
+            "0011": { char: "直", title: "实干派",
+                desc: "继承了\"直沽古寨\"的血脉，你信奉\"行动大于言语\"。脑洞虽大，但落地更扎实。", phrase: "直接啫！费那事儿干嘛？",
+                cp: "卫", food: "嘎巴菜", place: "天津站世纪钟" },
+            "0100": { char: "沽", title: "守望者",
+                desc: "你是七十二沽里一汪温柔的水。念旧、重情，把对故土和亲朋的深情藏在每一个具体的动作里。", phrase: "咱们嘛时候约顿饭啊？",
+                cp: "义", food: "罾蹦鲤鱼", place: "海河亲水平台" },
+            "0101": { char: "泥", title: "造梦师",
+                desc: "手上有泥，心中有梦。你像\"泥人张\"一样，善于把细腻到发丝的情感揉捏进作品里。", phrase: "我心里有数儿。", cp: "画",
+                food: "熟梨糕", place: "泥人张美术馆" },
+            "0110": { char: "口", title: "百事通",
+                desc: "九河下梢的烟火气养出了你。哪家的煎饼果子最香、哪条小路能躲开早高峰，您了问我就对了。", phrase: "嘛地方？我门儿清！",
+                cp: "门", food: "熟梨糕", place: "沈阳道古物市场" },
+            "0111": { char: "渡", title: "引渡人",
+                desc: "极致的共情力让你总能觉察到别人心底的惊涛骇浪，却不动声色地递上一根船桨。", phrase: "没事儿，有哥哥/姐姐我呢。", cp: "沽",
+                food: "杨村糕干", place: "天后宫" },
+            "1000": { char: "卫", title: "捍卫者",
+                desc: "天生带着\"拱卫京师\"的使命感！纪律就是生命线，是队友最安心的盾牌。", phrase: "好么眼儿的，介算嘛事儿！我来！", cp: "直",
+                food: "锅巴菜", place: "天津鼓楼" },
+            "1001": { char: "鼓", title: "燃情者",
+                desc: "你是\"津门法鼓\"里最响的那一槌！精力旺盛到无处安放，走到哪儿就把热闹带到哪儿。", phrase: "走起来！别坐着呀！", cp: "风",
+                food: "崩豆张", place: "民园广场" },
+            "1010": { char: "门", title: "破局者",
+                desc: "\"津门\"的气魄在你身上体现得淋漓尽致。敢于制定规则，更敢于打破陈规。", phrase: "把门开开！咱瞧瞧外头去！", cp: "海",
+                food: "耳朵眼炸糕", place: "解放桥" },
+            "1011": { char: "风", title: "探险家",
+                desc: "你是\"风筝魏\"手里那只挣脱了线的风筝！满脑子奇思妙想，没有什么能束缚你。", phrase: "无拘无束，嘛也不叫事！", cp: "门",
+                food: "狗不理包子", place: "天津之眼" },
+            "1100": { char: "义", title: "热心肠",
+                desc: "\"重实尚义\"四个字就是你的金字招牌。兜里有十块能给兄弟花八块，是江湖中传说的\"及时雨\"。", phrase: "嘛钱不钱的，乐呵乐呵得了！",
+                cp: "沽", food: "老爆三", place: "谦祥益保记" },
+            "1101": { char: "画", title: "美学匠",
+                desc: "你把日子过成了\"杨柳青年画\"——热烈、饱满、色彩斑斓。善于在平凡琐碎中发现被忽略的美。", phrase: "倍儿好看！嘛叫生活？介就叫生活！",
+                cp: "泥", food: "杨村糕干", place: "杨柳青古镇" },
+            "1110": { char: "海", title: "号召者",
+                desc: "渤海湾的雄风扑面而来！胸怀宽广能容万物，你是天生的演说家和领航员。", phrase: "跟我走，没错儿！出了事算我的！", cp: "门",
+                food: "煎饼果子", place: "滨海新区妈祖像" },
+            "1111": { char: "津", title: "摆渡者",
+                desc: "你是\"天子渡口\"那艘最灵动的船！热情、仗义、浪漫、随性，所有讨喜的因子你全占了。", phrase: "倍儿哏儿！嘛都不是事儿！",
+                cp: "海", food: "天津三绝全包圆", place: "海河游船" }
         };
 
-        // ============================================================
-        //  💞 CP字专属解释（按CP字索引，完整来自文档）
-        // ============================================================
-        const cpDescriptions = {
+        const cpDescriptionsCn = {
             "直": "你们俩是职场上的最佳拍档，一个定规则，一个落地执行",
             "风": "你是生活的解构者，他是世界的探险家，凑一起能聊一整夜",
             "海": "你负责掌舵穿梭，他负责号召同行，你俩是天选航海搭档",
-            "卫": "你负责攻坚技术难题，他负责守住前线阵地，永远可以相信你俩",
-            "义": "你闯荡江湖讲义气，他留守后方暖人心，完美互补",
+            "卫": "你负责攻坚技术难题，他负责守住前线阵地",
+            "义": "你闯荡江湖讲义气，他留守后方暖人心",
             "画": "你们俩是艺术双璧，一个雕琢立体，一个涂抹平面",
-            "泥": "你是平面美学大师，他是立体造物高手，艺术双生花",
-            "门": "你负责发现新大陆，他负责撬开大门口，行动力MAX",
+            "泥": "你是平面美学大师，他是立体造物高手",
+            "门": "你负责发现新大陆，他负责撬开大门口",
             "沽": "你渡人过河，他守人归家，是精神上的同路人",
-            "鼓": "你负责燥热地面，他负责飞向高空，你俩能搅动整个天津卫",
-            "容": "你负责整合资源，他负责振臂一呼，你俩能改变世界",
-            "谐": "你是生活的解构者，他是世界的探险家，凑一起能聊一整夜",
+            "鼓": "你负责燥热地面，他负责飞向高空",
+            "容": "你负责整合资源，他负责振臂一呼",
+            "谐": "你是生活的解构者，他是世界的探险家",
             "口": "你通晓内务，他开拓外联，珠联璧合",
             "渡": "你渡人过河，他守人归家，是精神上的同路人",
             "漕": "一个定规则，一个落地执行，职场最佳拍档"
         };
 
         // ============================================================
-        //  🧠 核心逻辑
+        //  🧠 中国学生版核心逻辑
         // ============================================================
-        let current = 0;
-        let answers = [];
-        let userInfo = {};
-        let currentVersion = 'cn';
-        let isTransitioning = false;
+        let cnCurrent = 0;
+        let cnAnswers = [];
+        let cnUserInfo = {};
+        let cnIsTransitioning = false;
+        const cnTotalQ = questionsCn.length;
 
-        const totalQ = questions.length;
-        const qNumber = document.getElementById('qNumber');
-        const qText = document.getElementById('qText');
-        const optionsBox = document.getElementById('optionsBox');
-        const prevBtn = document.getElementById('prevBtn');
-        const progressBar = document.getElementById('progressBar');
-        const progressText = document.getElementById('progressText');
-        const progressPercent = document.getElementById('progressPercent');
-        const qArea = document.getElementById('questionArea');
-        const rArea = document.getElementById('resultArea');
-        const progressArea = document.getElementById('progressArea');
+        // DOM 引用
+        const cnQNumber = document.getElementById('qNumberCn');
+        const cnQText = document.getElementById('qTextCn');
+        const cnOptionsBox = document.getElementById('optionsBoxCn');
+        const cnPrevBtn = document.getElementById('prevBtnCn');
+        const cnProgressBar = document.getElementById('progressBarCn');
+        const cnProgressText = document.getElementById('progressTextCn');
+        const cnProgressPercent = document.getElementById('progressPercentCn');
+        const cnQArea = document.getElementById('questionAreaCn');
+        const cnRArea = document.getElementById('resultAreaCn');
+        const cnProgressArea = document.getElementById('progressAreaCn');
+        const cnInfoPanel = document.getElementById('infoPanelCn');
 
-        const homePanel = document.getElementById('homePanel');
-        const infoPanelCn = document.getElementById('infoPanelCn');
-        const infoPanelForeign = document.getElementById('infoPanelForeign');
-
-        function hideAllPanels() {
-            homePanel.classList.add('hidden');
-            infoPanelCn.classList.add('hidden');
-            infoPanelForeign.classList.add('hidden');
-            qArea.classList.add('hidden');
-            rArea.classList.add('hidden');
-            progressArea.classList.add('hidden');
+        function cnHideAll() {
+            cnInfoPanel.classList.add('hidden');
+            cnQArea.classList.add('hidden');
+            cnRArea.classList.add('hidden');
+            cnProgressArea.classList.add('hidden');
         }
 
-        function showHome() { hideAllPanels();
-            homePanel.classList.remove('hidden'); }
+        function cnShowInfo() { cnHideAll();
+            cnInfoPanel.classList.remove('hidden'); }
 
-        function showInfoCn() { hideAllPanels();
-            infoPanelCn.classList.remove('hidden'); }
+        function cnShowQuestion() { cnHideAll();
+            cnQArea.classList.remove('hidden');
+            cnProgressArea.classList.remove('hidden'); }
 
-        function showInfoForeign() { hideAllPanels();
-            infoPanelForeign.classList.remove('hidden'); }
+        function cnShowResult() { cnHideAll();
+            cnRArea.classList.remove('hidden');
+            cnProgressArea.classList.remove('hidden'); }
 
-        function showQuestion() { hideAllPanels();
-            qArea.classList.remove('hidden');
-            progressArea.classList.remove('hidden'); }
-
-        function showResultPage() { hideAllPanels();
-            rArea.classList.remove('hidden');
-            progressArea.classList.remove('hidden'); }
-
-        // ===== 首页 =====
-        const optCn = document.getElementById('optCn');
-        const optForeign = document.getElementById('optForeign');
-        const enterInfoBtn = document.getElementById('enterInfoBtn');
-
-        optCn.addEventListener('click', function() {
-            optCn.classList.add('selected');
-            optForeign.classList.remove('selected');
-            optCn.querySelector('.v-badge').textContent = '✓ 已选';
-            optForeign.querySelector('.v-badge').textContent = '开发中';
-            currentVersion = 'cn';
-        });
-
-        optForeign.addEventListener('click', function() {
-            optForeign.classList.add('selected');
-            optCn.classList.remove('selected');
-            optForeign.querySelector('.v-badge').textContent = '✓ 已选';
-            optCn.querySelector('.v-badge').textContent = '中国学生版';
-            currentVersion = 'foreign';
-        });
-
-        enterInfoBtn.addEventListener('click', function() {
-            if (currentVersion === 'cn') showInfoCn();
-            else showInfoForeign();
-        });
-
-        // ===== 中国学生版 =====
-        document.getElementById('backHomeCnBtn').addEventListener('click', showHome);
-        document.getElementById('startCnBtn').addEventListener('click', function() {
-            const age = document.getElementById('cnAge').value;
-            const region = document.getElementById('cnRegion').value.trim();
-            const major = document.getElementById('cnMajor').value.trim();
-            const grade = document.getElementById('cnGrade').value;
-            if (!age || !region || !major || !grade) { alert('请完整填写所有信息～'); return; }
-            if (parseInt(age) < 10 || parseInt(age) > 99) { alert('请输入有效年龄（10-99岁）'); return; }
-            userInfo = { version: 'cn', age: parseInt(age), region, major, grade };
-            answers = new Array(totalQ).fill(null);
-            current = 0;
-            showQuestion();
-            renderQuestion(0);
-        });
-
-        // ===== 留学生版 =====
-        document.getElementById('backHomeForeignBtn').addEventListener('click', showHome);
-
-        // ===== 渲染题目 =====
-        function renderQuestion(index) {
-            const item = questions[index];
-            current = index;
-            qNumber.textContent = `第 ${index+1} / ${totalQ} 题`;
-            qText.textContent = item.q;
-
+        function cnRenderQuestion(index) {
+            const item = questionsCn[index];
+            cnCurrent = index;
+            cnQNumber.textContent = `第 ${index+1} / ${cnTotalQ} 题`;
+            cnQText.textContent = item.q;
             const labels = ['A', 'B'];
-            const selectedVal = answers[index];
-            optionsBox.innerHTML = `
+            const selectedVal = cnAnswers[index];
+            cnOptionsBox.innerHTML = `
                 <div class="option" data-val="0">
                     <span class="opt-label">${labels[0]}</span>
                     <span class="opt-text">${item.a}</span>
@@ -1180,80 +978,58 @@
                     <span class="opt-text">${item.b}</span>
                 </div>
             `;
-
-            const optionEls = optionsBox.querySelectorAll('.option');
+            const optionEls = cnOptionsBox.querySelectorAll('.option');
             optionEls.forEach(el => {
                 const val = parseInt(el.dataset.val);
-                if (selectedVal !== null && selectedVal === val) {
-                    el.classList.add('selected');
-                }
-                el.addEventListener('click', handleOptionClick);
+                if (selectedVal !== null && selectedVal === val) el.classList.add('selected');
+                el.addEventListener('click', cnHandleOptionClick);
             });
-
             const done = index;
-            progressBar.style.width = ((done / totalQ) * 100) + '%';
-            progressText.textContent = done;
-            progressPercent.textContent = Math.round((done / totalQ) * 100) + '%';
-            updatePrevBtn();
-
-            qText.style.animation = 'none';
-            optionsBox.style.animation = 'none';
-            requestAnimationFrame(() => {
-                qText.style.animation = 'fadeIn 0.3s ease';
-                optionsBox.style.animation = 'fadeIn 0.3s ease';
-            });
+            cnProgressBar.style.width = ((done / cnTotalQ) * 100) + '%';
+            cnProgressText.textContent = done;
+            cnProgressPercent.textContent = Math.round((done / cnTotalQ) * 100) + '%';
+            cnPrevBtn.disabled = index === 0;
         }
 
-        function handleOptionClick(e) {
-            if (isTransitioning) return;
+        function cnHandleOptionClick(e) {
+            if (cnIsTransitioning) return;
             const el = e.currentTarget;
             const val = parseInt(el.dataset.val);
-            const index = current;
-            if (answers[index] === val) return;
-
-            answers[index] = val;
-            const optionEls = optionsBox.querySelectorAll('.option');
+            const index = cnCurrent;
+            if (cnAnswers[index] === val) return;
+            cnAnswers[index] = val;
+            const optionEls = cnOptionsBox.querySelectorAll('.option');
             optionEls.forEach(o => o.classList.remove('selected'));
             el.classList.add('selected');
-            updatePrevBtn();
-
-            isTransitioning = true;
+            cnIsTransitioning = true;
             setTimeout(() => {
-                if (index + 1 < totalQ) {
-                    renderQuestion(index + 1);
-                } else {
-                    computeAndShowResult();
-                }
-                isTransitioning = false;
+                if (index + 1 < cnTotalQ) cnRenderQuestion(index + 1);
+                else cnComputeResult();
+                cnIsTransitioning = false;
             }, 260);
         }
 
-        function updatePrevBtn() {
-            prevBtn.disabled = current === 0;
-        }
-
-        prevBtn.addEventListener('click', function() {
-            if (isTransitioning || current === 0) return;
-            renderQuestion(current - 1);
+        cnPrevBtn.addEventListener('click', function() {
+            if (cnIsTransitioning || cnCurrent === 0) return;
+            cnRenderQuestion(cnCurrent - 1);
         });
 
-        // ===== 计算并显示结果（含匹配度） =====
-        function computeAndShowResult() {
-            let dimScores = [0, 0, 0, 0];
-            let dimCount = [0, 0, 0, 0];
-            for (let i = 0; i < answers.length; i++) {
-                if (answers[i] === null) continue;
-                const dim = questions[i].dim;
-                dimScores[dim] += answers[i];
+        function cnComputeResult() {
+            let dimScores = [0, 0, 0, 0],
+                dimCount = [0, 0, 0, 0];
+            for (let i = 0; i < cnAnswers.length; i++) {
+                if (cnAnswers[i] === null) continue;
+                const dim = questionsCn[i].dim;
+                dimScores[dim] += cnAnswers[i];
                 dimCount[dim] += 1;
             }
             for (let d = 0; d < 4; d++) {
                 const count = dimCount[d];
                 if (count === 0) continue;
                 if (count % 2 === 0 && dimScores[d] === count / 2) {
-                    for (let i = answers.length - 1; i >= 0; i--) {
-                        if (questions[i].dim === d && answers[i] !== null) {
-                            dimScores[d] += (answers[i] === 1) ? 1 : 0;
+                    for (let i = cnAnswers.length - 1; i >= 0; i--) {
+                        if (questionsCn[i].dim === d && cnAnswers[i] !== null) {
+                            dimScores[d] += (cnAnswers[i] === 1) ? 1 : 0;
                             break;
                         }
                     }
@@ -1262,63 +1038,49 @@
             let dimTypes = ['', '', '', ''];
             let dimRatios = [0, 0, 0, 0];
             for (let d = 0; d < 4; d++) {
-                const score = dimScores[d];
-                const count = dimCount[d];
-                if (count === 0) {
-                    dimTypes[d] = '0';
-                    dimRatios[d] = 0.5;
-                } else {
-                    dimTypes[d] = (score > count - score) ? '1' : '0';
-                    dimRatios[d] = Math.max(score, count - score) / count;
-                }
+                const score = dimScores[d],
+                    count = dimCount[d];
+                if (count === 0) { dimTypes[d] = '0';
+                    dimRatios[d] = 0.5; } else { dimTypes[d] = (score > count - score) ? '1' : '0';
+                    dimRatios[d] = Math.max(score, count - score) / count; }
             }
             const typeCode = dimTypes.join('');
-            const data = results[typeCode] || results["0000"];
+            const data = resultsCn[typeCode] || resultsCn["0000"];
             const cpChar = data.cp;
-
-            // ---- 计算匹配度 ----
             const avgRatio = (dimRatios[0] + dimRatios[1] + dimRatios[2] + dimRatios[3]) / 4;
             const matchPercent = Math.round(avgRatio * 100);
 
-            // 渲染结果
-            document.getElementById('rChar').textContent = data.char;
-            document.getElementById('rTitle').textContent = data.title;
-            document.getElementById('rDesc').textContent = data.desc;
-            document.getElementById('rPhrase').textContent = data.phrase;
-            document.getElementById('rFood').textContent = data.food;
-            document.getElementById('rPlace').textContent = data.place;
-            document.getElementById('rCpChar').textContent = cpChar;
-            document.getElementById('rCpDesc').textContent = cpDescriptions[cpChar] || '（完美的灵魂搭档）';
-            document.getElementById('resultCharDisplay').textContent = data.char;
-            document.getElementById('resultLandmarkDisplay').innerHTML = `🏛️ ${data.place}`;
-
-            // 匹配度UI
-            document.getElementById('matchCharLabel').textContent = data.char;
-            document.getElementById('matchPercent').textContent = matchPercent + '%';
-
-            const barFill = document.getElementById('matchBarFill');
+            document.getElementById('rCharCn').textContent = data.char;
+            document.getElementById('rTitleCn').textContent = data.title;
+            document.getElementById('rDescCn').textContent = data.desc;
+            document.getElementById('rPhraseCn').textContent = data.phrase;
+            document.getElementById('rFoodCn').textContent = data.food;
+            document.getElementById('rPlaceCn').textContent = data.place;
+            document.getElementById('rCpCharCn').textContent = cpChar;
+            document.getElementById('rCpDescCn').textContent = cpDescriptionsCn[cpChar] || '完美的灵魂搭档';
+            document.getElementById('resultCharCn').textContent = data.char;
+            document.getElementById('resultLandmarkCn').innerHTML = `🏛️ ${data.place}`;
+            document.getElementById('matchCharCn').textContent = data.char;
+            document.getElementById('matchPercentCn').textContent = matchPercent + '%';
+            const barFill = document.getElementById('matchBarCn');
             barFill.className = 'match-bar-fill';
             if (matchPercent >= 75) barFill.classList.add('high');
             else if (matchPercent >= 50) barFill.classList.add('mid');
             else barFill.classList.add('low');
+            setTimeout(() => { barFill.style.width = matchPercent + '%'; }, 200);
 
-            setTimeout(() => {
-                barFill.style.width = matchPercent + '%';
-            }, 200);
+            cnShowResult();
+            cnProgressBar.style.width = '100%';
+            cnProgressText.textContent = cnTotalQ;
+            cnProgressPercent.textContent = '100%';
 
-            showResultPage();
-            progressBar.style.width = '100%';
-            progressText.textContent = totalQ;
-            progressPercent.textContent = '100%';
-
-            // 上报数据
-            if (cloudReady && db && userInfo.age) {
+            if (cloudReady && db && cnUserInfo.age) {
                 const reportData = {
-                    version: userInfo.version || 'cn',
-                    age: userInfo.age,
-                    region: userInfo.region || '',
-                    major: userInfo.major || '',
-                    grade: userInfo.grade || '',
+                    version: 'cn',
+                    age: cnUserInfo.age,
+                    region: cnUserInfo.region || '',
+                    major: cnUserInfo.major || '',
+                    grade: cnUserInfo.grade || '',
                     ei_score: dimScores[0],
                     sn_score: dimScores[1],
                     tf_score: dimScores[2],
@@ -1347,16 +1109,15 @@
             }
         }
 
-        // ===== 分享卡片 =====
-        document.getElementById('shareBtn').addEventListener('click', function() {
-            const card = document.getElementById('shareCard');
+        document.getElementById('shareBtnCn').addEventListener('click', function() {
+            const card = document.getElementById('shareCardCn');
             this.textContent = '⏳ 生成中...';
             this.disabled = true;
             html2canvas(card, { scale: 2, backgroundColor: '#ffffff', useCORS: true, allowTaint: true, logging: false,
                     width: card.scrollWidth, height: card.scrollHeight })
                 .then(canvas => {
                     const link = document.createElement('a');
-                    const charName = document.getElementById('rChar').textContent || '津';
+                    const charName = document.getElementById('rCharCn').textContent || '津';
                     link.download = `津字人格_${charName}.png`;
                     link.href = canvas.toDataURL('image/png');
                     link.click();
@@ -1368,6 +1129,29 @@
                     this.disabled = false;
                 });
         });
+
+        document.getElementById('backHomeCnBtn').addEventListener('click', function() {
+            document.getElementById('cnPanel').classList.add('hidden');
+            document.getElementById('entryPanel').classList.remove('hidden');
+        });
+
+        document.getElementById('startCnBtn').addEventListener('click', function() {
+            const age = document.getElementById('cnAge').value;
+            const region = document.getElementById('cnRegion').value.trim();
+            const major = document.getElementById('cnMajor').value.trim();
+            const grade = document.getElementById('cnGrade').value;
+            if (!age || !region || !major || !grade) { alert('请完整填写所有信息～'); return; }
+            if (parseInt(age) < 10 || parseInt(age) > 99) { alert('请输入有效年龄（10-99岁）'); return; }
+            cnUserInfo = { age: parseInt(age), region, major, grade };
+            cnAnswers = new Array(cnTotalQ).fill(null);
+            cnCurrent = 0;
+            cnShowQuestion();
+            cnRenderQuestion(0);
+        });
+
+        function initCn() {
+            cnShowInfo();
+        }
 
         // ===== 补报缓存 =====
         function retryFailedReports() {
@@ -1390,9 +1174,6 @@
             } catch (e) { console.warn('补报失败', e); }
         }
         setTimeout(retryFailedReports, 3000);
-
-        // ===== 启动 =====
-        showHome();
     </script>
 </body>
 </html>
