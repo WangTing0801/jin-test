@@ -1408,6 +1408,7 @@
 
         // ===== 更新结果展示 =====
         function updateResultDisplay(result) {
+             if (!document.getElementById('rChar')) return;
             const { data, cpChar, matchPercent } = result;
             const lang = currentLang;
             const t = ui[lang];
