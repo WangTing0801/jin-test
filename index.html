@@ -7,14 +7,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
     </script>
- <script src="https://static.cloudbase.net/cloudbase-js-sdk/latest/cloudbase.full.js"></script>
-<script>
-  const app = cloudbase.init({
-    env: "jin-personality-d0fxwmgc4c28cd06", // 替换为您的环境id
-    region: "ap-shanghai", // 不传默认为上海地域
-  });
-</script>
-
+    <script src="https://static.cloudbase.net/cloudbase-js-sdk/latest/cloudbase.full.js">
+    </script>
 
     <style>
         /* ===== 导入柔和字体 ===== */
@@ -774,24 +768,77 @@
 
     <script>
         // ============================================================
-        //  🚀 云开发：初始化
+        //  🚀 云开发：初始化 + 匿名登录（写入数据库前必须登录）
         // ============================================================
         let db = null;
         let cloudReady = false;
-        try {
-            if (typeof cloudbase !== 'undefined' && cloudbase.init) {
-                const app = cloudbase.init({
-                    env: 'jin-personality-d0fxwmg4c28cd06',
-                    region: 'ap-shanghai'
-                });
-                db = app.database();
-                cloudReady = true;
-                console.log('✅ 云开发初始化成功');
-            } else {
+        let cloudApp = null;
+
+        async function initCloud() {
+            if (typeof cloudbase === 'undefined' || !cloudbase.init) {
                 console.warn('⚠️ cloudbase SDK 未加载');
+                return;
             }
-        } catch (e) {
-            console.warn('⚠️ 云开发初始化失败', e.message);
+            cloudApp = cloudbase.init({
+                env: 'jin-personality-d0fxwmgc4c28cd06',
+                region: 'ap-shanghai'
+            });
+            const auth = cloudApp.auth({ persistence: 'local' });
+
+            // 已有登录态则复用，否则匿名登录
+            let loginState = null;
+            try {
+                loginState = typeof auth.getLoginState === 'function'
+                    ? await auth.getLoginState()
+                    : null;
+            } catch (e) {}
+
+            if (!loginState) {
+                if (typeof auth.signInAnonymously === 'function') {
+                    await auth.signInAnonymously();
+                } else if (auth.anonymousAuthProvider) {
+                    await auth.anonymousAuthProvider().signIn();
+                } else {
+                    throw new Error('当前 SDK 不支持匿名登录');
+                }
+            }
+
+            db = cloudApp.database();
+            cloudReady = true;
+            console.log('✅ 云开发初始化并匿名登录成功');
+        }
+
+        const cloudInitPromise = initCloud().catch(e => {
+            cloudReady = false;
+            console.warn('⚠️ 云开发初始化失败', e && e.message ? e.message : e);
+        });
+
+        async function ensureCloudReady() {
+            await cloudInitPromise;
+            return cloudReady && db;
+        }
+
+        async function saveReport(reportData) {
+            if (!(await ensureCloudReady())) {
+                console.warn('⚠️ 云开发未连接，数据未上报');
+                try {
+                    const failed = JSON.parse(localStorage.getItem('failed_reports') || '[]');
+                    failed.push(reportData);
+                    localStorage.setItem('failed_reports', JSON.stringify(failed));
+                } catch (e) {}
+                return;
+            }
+            try {
+                const res = await db.collection('results').add(reportData);
+                console.log('✅ 数据上报成功', res);
+            } catch (err) {
+                console.error('❌ 上报失败', err);
+                try {
+                    const failed = JSON.parse(localStorage.getItem('failed_reports') || '[]');
+                    failed.push(reportData);
+                    localStorage.setItem('failed_reports', JSON.stringify(failed));
+                } catch (e) {}
+            }
         }
 
         // ============================================================
@@ -1080,8 +1127,17 @@
             cnProgressText.textContent = cnTotalQ;
             cnProgressPercent.textContent = '100%';
 
-            if (cloudReady && db && cnUserInfo.age) {
-                const reportData = {
+            if (cnUserInfo.age) {
+                const answerDetails = cnAnswers.map((val, i) => {
+                    const q = questionsCn[i];
+                    return {
+                        index: i + 1,
+                        question: q.q,
+                        choice: val === 1 ? 'B' : 'A',
+                        answer: val === 1 ? q.b : q.a
+                    };
+                });
+                saveReport({
                     version: 'cn',
                     age: cnUserInfo.age,
                     region: cnUserInfo.region || '',
@@ -1098,20 +1154,18 @@
                     mbti_type: typeCode,
                     mbti_char: data.char,
                     mbti_title: data.title,
+                    mbti_desc: data.desc,
+                    mbti_phrase: data.phrase,
+                    mbti_food: data.food,
+                    mbti_place: data.place,
                     cp_char: cpChar,
+                    cp_desc: cpDescriptionsCn[cpChar] || '',
                     match_percent: matchPercent,
+                    answers: cnAnswers.slice(),
+                    answer_details: answerDetails,
+                    result_summary: `${data.char} · ${data.title}（匹配度 ${matchPercent}%）`,
                     submitted_at: new Date().toISOString()
-                };
-                db.collection('results').add(reportData).then(res => console.log('✅ 数据上报成功', res)).catch(err => {
-                    console.error('❌ 上报失败', err);
-                    try {
-                        const failed = JSON.parse(localStorage.getItem('failed_reports') || '[]');
-                        failed.push(reportData);
-                        localStorage.setItem('failed_reports', JSON.stringify(failed));
-                    } catch (e) {}
                 });
-            } else {
-                console.warn('⚠️ 云开发未连接，数据未上报');
             }
         }
 
@@ -1160,23 +1214,27 @@
         }
 
         // ===== 补报缓存 =====
-        function retryFailedReports() {
-            if (!cloudReady || !db) return;
+        async function retryFailedReports() {
+            if (!(await ensureCloudReady())) return;
             try {
                 const failed = JSON.parse(localStorage.getItem('failed_reports') || '[]');
                 if (failed.length === 0) return;
                 console.log(`🔄 补报 ${failed.length} 条缓存...`);
-                const toRetry = [...failed];
-                let successCount = 0;
-                toRetry.forEach((item, idx) => {
-                    db.collection('results').add(item).then(() => {
-                        successCount++;
-                        if (successCount === toRetry.length) {
-                            localStorage.removeItem('failed_reports');
-                            console.log('✅ 缓存补报完成');
-                        }
-                    }).catch(err => console.warn(`补报第 ${idx+1} 条失败`, err));
-                });
+                const remain = [];
+                for (let i = 0; i < failed.length; i++) {
+                    try {
+                        await db.collection('results').add(failed[i]);
+                    } catch (err) {
+                        console.warn(`补报第 ${i + 1} 条失败`, err);
+                        remain.push(failed[i]);
+                    }
+                }
+                if (remain.length === 0) {
+                    localStorage.removeItem('failed_reports');
+                    console.log('✅ 缓存补报完成');
+                } else {
+                    localStorage.setItem('failed_reports', JSON.stringify(remain));
+                }
             } catch (e) { console.warn('补报失败', e); }
         }
         setTimeout(retryFailedReports, 3000);
