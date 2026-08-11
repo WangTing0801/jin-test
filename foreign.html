@@ -7,13 +7,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
     </script>
- <script src="https://static.cloudbase.net/cloudbase-js-sdk/latest/cloudbase.full.js"></script>
-<script>
-  const app = cloudbase.init({
-    env: "jin-personality-d0fxwmgc4c28cd06", // 替换为您的环境id
-    region: "ap-shanghai", // 不传默认为上海地域
-  });
-</script>
+    <script src="https://static.cloudbase.net/cloudbase-js-sdk/latest/cloudbase.full.js">
+    </script>
 
     <style>
         /* ===== 导入字体 ===== */
@@ -744,24 +739,76 @@
 
     <script>
         // ============================================================
-        //  🚀 云开发：初始化
+        //  🚀 云开发：初始化 + 匿名登录（写入数据库前必须登录）
         // ============================================================
         let db = null;
         let cloudReady = false;
-        try {
-            if (typeof cloudbase !== 'undefined' && cloudbase.init) {
-                const app = cloudbase.init({
-                    env: 'jin-personality-d0fxwmg4c28cd06',
-                    region: 'ap-shanghai'
-                });
-                db = app.database();
-                cloudReady = true;
-                console.log('✅ CloudBase initialized');
-            } else {
+        let cloudApp = null;
+
+        async function initCloud() {
+            if (typeof cloudbase === 'undefined' || !cloudbase.init) {
                 console.warn('⚠️ CloudBase SDK not loaded');
+                return;
             }
-        } catch (e) {
-            console.warn('⚠️ CloudBase init failed', e.message);
+            cloudApp = cloudbase.init({
+                env: 'jin-personality-d0fxwmgc4c28cd06',
+                region: 'ap-shanghai'
+            });
+            const auth = cloudApp.auth({ persistence: 'local' });
+
+            let loginState = null;
+            try {
+                loginState = typeof auth.getLoginState === 'function'
+                    ? await auth.getLoginState()
+                    : null;
+            } catch (e) {}
+
+            if (!loginState) {
+                if (typeof auth.signInAnonymously === 'function') {
+                    await auth.signInAnonymously();
+                } else if (auth.anonymousAuthProvider) {
+                    await auth.anonymousAuthProvider().signIn();
+                } else {
+                    throw new Error('Anonymous login not supported by current SDK');
+                }
+            }
+
+            db = cloudApp.database();
+            cloudReady = true;
+            console.log('✅ CloudBase initialized & anonymous login OK');
+        }
+
+        const cloudInitPromise = initCloud().catch(e => {
+            cloudReady = false;
+            console.warn('⚠️ CloudBase init failed', e && e.message ? e.message : e);
+        });
+
+        async function ensureCloudReady() {
+            await cloudInitPromise;
+            return cloudReady && db;
+        }
+
+        async function saveReport(reportData) {
+            if (!(await ensureCloudReady())) {
+                console.warn('⚠️ CloudBase not connected');
+                try {
+                    const failed = JSON.parse(localStorage.getItem('failed_reports') || '[]');
+                    failed.push(reportData);
+                    localStorage.setItem('failed_reports', JSON.stringify(failed));
+                } catch (e) {}
+                return;
+            }
+            try {
+                const res = await db.collection('results').add(reportData);
+                console.log('✅ Data saved', res);
+            } catch (err) {
+                console.error('❌ Save failed', err);
+                try {
+                    const failed = JSON.parse(localStorage.getItem('failed_reports') || '[]');
+                    failed.push(reportData);
+                    localStorage.setItem('failed_reports', JSON.stringify(failed));
+                } catch (e) {}
+            }
         }
 
         // ============================================================
@@ -1376,8 +1423,27 @@
             progressLabel.innerHTML = t.progressLabel.replace('{0}', totalQ);
 
             // 上报数据
-            if (cloudReady && db && userInfo.age) {
-                const reportData = {
+            if (userInfo.age) {
+                const titleZh = data.title.zh || data.title;
+                const descZh = data.desc.zh || data.desc;
+                const phraseZh = data.phrase.zh || data.phrase;
+                const foodZh = data.food.zh || data.food;
+                const placeZh = data.place.zh || data.place;
+                const cpDescObj = cpDescriptions[cpChar] || {};
+                const cpDescZh = cpDescObj.zh || '';
+                const answerDetails = answers.map((val, i) => {
+                    const q = questionsData[i];
+                    const qText = (q.q && q.q.zh) ? q.q.zh : q.q;
+                    const aText = (q.a && q.a.zh) ? q.a.zh : q.a;
+                    const bText = (q.b && q.b.zh) ? q.b.zh : q.b;
+                    return {
+                        index: i + 1,
+                        question: qText,
+                        choice: val === 1 ? 'B' : 'A',
+                        answer: val === 1 ? bText : aText
+                    };
+                });
+                saveReport({
                     version: 'foreign',
                     lang: currentLang,
                     age: userInfo.age,
@@ -1394,27 +1460,30 @@
                     jp_type: dimTypes[3] === '1' ? 'J' : 'P',
                     mbti_type: typeCode,
                     mbti_char: data.char,
-                    mbti_title: data.title['zh'],
+                    mbti_title: titleZh,
+                    mbti_title_en: data.title.en || '',
+                    mbti_desc: descZh,
+                    mbti_desc_en: data.desc.en || '',
+                    mbti_phrase: phraseZh,
+                    mbti_phrase_en: data.phrase.en || '',
+                    mbti_food: foodZh,
+                    mbti_food_en: data.food.en || '',
+                    mbti_place: placeZh,
+                    mbti_place_en: data.place.en || '',
                     cp_char: cpChar,
+                    cp_desc: cpDescZh,
+                    cp_desc_en: cpDescObj.en || '',
                     match_percent: matchPercent,
+                    answers: answers.slice(),
+                    answer_details: answerDetails,
+                    result_summary: `${data.char} · ${titleZh}（匹配度 ${matchPercent}%）`,
                     submitted_at: new Date().toISOString()
-                };
-                db.collection('results').add(reportData).then(res => console.log('✅ Data saved', res)).catch(err => {
-                    console.error('❌ Save failed', err);
-                    try {
-                        const failed = JSON.parse(localStorage.getItem('failed_reports') || '[]');
-                        failed.push(reportData);
-                        localStorage.setItem('failed_reports', JSON.stringify(failed));
-                    } catch (e) {}
                 });
-            } else {
-                console.warn('⚠️ CloudBase not connected');
             }
         }
 
         // ===== 更新结果展示 =====
         function updateResultDisplay(result) {
-             if (!document.getElementById('rChar')) return;
             const { data, cpChar, matchPercent } = result;
             const lang = currentLang;
             const t = ui[lang];
@@ -1571,23 +1640,27 @@
         });
 
         // ===== 补报缓存 =====
-        function retryFailedReports() {
-            if (!cloudReady || !db) return;
+        async function retryFailedReports() {
+            if (!(await ensureCloudReady())) return;
             try {
                 const failed = JSON.parse(localStorage.getItem('failed_reports') || '[]');
                 if (failed.length === 0) return;
                 console.log(`🔄 Retrying ${failed.length} cached reports...`);
-                const toRetry = [...failed];
-                let successCount = 0;
-                toRetry.forEach((item, idx) => {
-                    db.collection('results').add(item).then(() => {
-                        successCount++;
-                        if (successCount === toRetry.length) {
-                            localStorage.removeItem('failed_reports');
-                            console.log('✅ All cached reports sent');
-                        }
-                    }).catch(err => console.warn(`Retry ${idx+1} failed`, err));
-                });
+                const remain = [];
+                for (let i = 0; i < failed.length; i++) {
+                    try {
+                        await db.collection('results').add(failed[i]);
+                    } catch (err) {
+                        console.warn(`Retry ${i + 1} failed`, err);
+                        remain.push(failed[i]);
+                    }
+                }
+                if (remain.length === 0) {
+                    localStorage.removeItem('failed_reports');
+                    console.log('✅ All cached reports sent');
+                } else {
+                    localStorage.setItem('failed_reports', JSON.stringify(remain));
+                }
             } catch (e) { console.warn('Retry failed', e); }
         }
         setTimeout(retryFailedReports, 3000);
