@@ -700,9 +700,8 @@
         <div id="resultArea" class="result-box hidden">
             <div id="shareCard">
                 <div class="result-badge" id="resultBadge">Your Tianjin Character:</div>
-                <div class="result-art">
-                    <div class="char-area" id="resultCharDisplay">津</div>
-                  
+               <div class="result-art">
+                     <div class="char-area" id="resultCharDisplay" style="width:300px; height:350px; font-size:200px;font-family: 'STKaiti', 'KaiTi', '楷体', serif;">津</div>
                 </div>
               
                 <div class="result-title" id="rTitle">The Rule Keeper</div>
@@ -1488,7 +1487,7 @@
             const lang = currentLang;
             const t = ui[lang];
 
-            document.getElementById('rChar').textContent = data.char;
+           // document.getElementById('rChar').textContent = data.char;
             document.getElementById('rTitle').textContent = getLangText(data.title);
             document.getElementById('rDesc').textContent = getLangText(data.desc);
             document.getElementById('rPhrase').textContent = getLangText(data.phrase);
@@ -1498,7 +1497,7 @@
             document.getElementById('rCpDesc').textContent = getLangText(cpDescriptions[cpChar] || { zh: '完美的灵魂搭档',
                 en: 'Perfect soulmate' });
             document.getElementById('resultCharDisplay').textContent = data.char;
-            document.getElementById('resultLandmarkDisplay').innerHTML = `${t.landmarkLabel}<br>${getLangText(data.place)}`;
+            //document.getElementById('resultLandmarkDisplay').innerHTML = `${t.landmarkLabel}<br>${getLangText(data.place)}`;
 
             document.getElementById('matchCharLabel').textContent = data.char;
             document.getElementById('matchPercent').textContent = matchPercent + '%';
@@ -1565,7 +1564,7 @@
             document.getElementById('shareBtn').textContent = t.shareBtn;
             document.getElementById('retryBtn').textContent = t.retryBtn;
             document.getElementById('footerNote').textContent = t.footer;
-            document.getElementById('resultLandmarkDisplay').innerHTML = t.landmarkLabel + '<br>coming soon';
+            //document.getElementById('resultLandmarkDisplay').innerHTML = t.landmarkLabel + '<br>coming soon';
 
             if (!rArea.classList.contains('hidden') && lastResultData) {
                 updateResultDisplay(lastResultData);
