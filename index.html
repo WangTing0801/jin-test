@@ -32,13 +32,13 @@
                 radial-gradient(circle at 80% 70%, rgba(192, 57, 43, 0.04) 0%, transparent 50%);
         }
         .container {
-            max-width: 400px;
+            max-width: 440px;
             width: 100%;
             background: #ffffff;
             border-radius: 36px;
             box-shadow: 0 20px 80px rgba(0, 0, 0, 0.06), 0 8px 32px rgba(0, 0, 0, 0.03);
             padding: 32px 28px 28px;
-            min-height: 500px;
+            min-height: 450px;
             position: relative;
             transition: all 0.3s;
             border: 1px solid rgba(255, 255, 255, 0.5);
@@ -637,7 +637,7 @@
         <div id="entryPanel">
             <div class="entry-box">
                 <div class="entry-title">
-                    测测你的<span class="highlight">津字</span>人格
+                    🏮 测测你的<span class="highlight">津字</span>人格
                 </div>
                 <div class="entry-sub">九河下梢 · 人间烟火 · 请选择你的版本</div>
                 <div class="entry-options">
@@ -645,7 +645,7 @@
                         <div class="e-icon">🇨🇳</div>
                         <div class="e-info">
                             <div class="e-name">中国学生版</div>
-                            <div class="e-desc">面向在中国大陆就读的学生 · 中文</div>
+                            <div class="e-desc">面向中国大陆就读学生<br>中文版</div>
                         </div>
                         <div class="e-arrow">→</div>
                     </div>
@@ -653,13 +653,14 @@
                         <div class="e-icon">🌏</div>
                         <div class="e-info">
                             <div class="e-name">留学生版</div>
-                            <div class="e-desc">面向来华留学生 · 中英双语切换</div>
+                            <div class="e-desc">面向来华留学生<br>中英双语切换版本</div>
                         </div>
-                       
+                        
                         <div class="e-arrow">→</div>
                     </div>
                 </div>
             </div>
+            <div class="footer-note">— 测测你的津字人格 —</div>
         </div>
 
         <!-- ========================================================= -->
@@ -731,10 +732,10 @@
                 <div id="shareCardCn">
                     <div class="result-badge">你的津字人格是：</div>
                     <div class="result-art">
-                        <div class="char-area" id="resultCharCn">津</div>
-                        <div class="landmark-area" id="resultLandmarkCn">🏛️ 地标<br>（待放图）</div>
+                      <div class="char-area" id="resultCharCn" style="width:200px; height:250px; font-size:150px; ">津</div>
+                        
                     </div>
-                    <div class="result-char" id="rCharCn">漕</div>
+                    
                     <div class="result-title" id="rTitleCn">执规者</div>
                     <div class="result-desc" id="rDescCn">描述加载中...</div>
                     <div class="match-section">
@@ -1103,7 +1104,7 @@
             const avgRatio = (dimRatios[0] + dimRatios[1] + dimRatios[2] + dimRatios[3]) / 4;
             const matchPercent = Math.round(avgRatio * 100);
 
-            document.getElementById('rCharCn').textContent = data.char;
+           // document.getElementById('rCharCn').textContent = data.char;
             document.getElementById('rTitleCn').textContent = data.title;
             document.getElementById('rDescCn').textContent = data.desc;
             document.getElementById('rPhraseCn').textContent = data.phrase;
@@ -1112,7 +1113,7 @@
             document.getElementById('rCpCharCn').textContent = cpChar;
             document.getElementById('rCpDescCn').textContent = cpDescriptionsCn[cpChar] || '完美的灵魂搭档';
             document.getElementById('resultCharCn').textContent = data.char;
-            document.getElementById('resultLandmarkCn').innerHTML = `🏛️ ${data.place}`;
+            //document.getElementById('resultLandmarkCn').innerHTML = `🏛️ ${data.place}`;
             document.getElementById('matchCharCn').textContent = data.char;
             document.getElementById('matchPercentCn').textContent = matchPercent + '%';
             const barFill = document.getElementById('matchBarCn');
