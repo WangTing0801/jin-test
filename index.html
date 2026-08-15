@@ -1016,52 +1016,58 @@
             cnProgressArea.classList.remove('hidden'); }
 
         function cnRenderQuestion(index) {
-            const item = questionsCn[index];
-            cnCurrent = index;
-            cnQNumber.textContent = `第 ${index+1} / ${cnTotalQ} 题`;
-            cnQText.textContent = item.q;
-            const labels = ['A', 'B'];
-            const selectedVal = cnAnswers[index];
-            cnOptionsBox.innerHTML = `
-                <div class="option" data-val="0">
-                    <span class="opt-label">${labels[0]}</span>
-                    <span class="opt-text">${item.a}</span>
-                </div>
-                <div class="option" data-val="1">
-                    <span class="opt-label">${labels[1]}</span>
-                    <span class="opt-text">${item.b}</span>
-                </div>
-            `;
-            const optionEls = cnOptionsBox.querySelectorAll('.option');
-            optionEls.forEach(el => {
-                const val = parseInt(el.dataset.val);
-                if (selectedVal !== null && selectedVal === val) el.classList.add('selected');
-                el.addEventListener('click', cnHandleOptionClick);
-            });
-            const done = index;
-            cnProgressBar.style.width = ((done / cnTotalQ) * 100) + '%';
-            cnProgressText.textContent = done;
-            cnProgressPercent.textContent = Math.round((done / cnTotalQ) * 100) + '%';
-            cnPrevBtn.disabled = index === 0;
-        }
+    const item = questionsCn[index];
+    cnCurrent = index;
+    cnQNumber.textContent = `第 ${index+1} / ${cnTotalQ} 题`;
+    cnQText.textContent = item.q;
+    const labels = ['A', 'B'];
+    const selectedVal = cnAnswers[index];
+    cnOptionsBox.innerHTML = `
+        <div class="option" data-val="0">
+            <span class="opt-label">${labels[0]}</span>
+            <span class="opt-text">${item.a}</span>
+        </div>
+        <div class="option" data-val="1">
+            <span class="opt-label">${labels[1]}</span>
+            <span class="opt-text">${item.b}</span>
+        </div>
+    `;
+    const optionEls = cnOptionsBox.querySelectorAll('.option');
+    optionEls.forEach(el => {
+        const val = parseInt(el.dataset.val);
+        if (selectedVal !== null && selectedVal === val) el.classList.add('selected');
+        el.addEventListener('click', cnHandleOptionClick);
+    });
+    const done = index;
+    cnProgressBar.style.width = ((done / cnTotalQ) * 100) + '%';
+    cnProgressText.textContent = done;
+    cnProgressPercent.textContent = Math.round((done / cnTotalQ) * 100) + '%';
+    cnPrevBtn.disabled = index === 0;
+}
 
-        function cnHandleOptionClick(e) {
-            if (cnIsTransitioning) return;
-            const el = e.currentTarget;
-            const val = parseInt(el.dataset.val);
-            const index = cnCurrent;
-            if (cnAnswers[index] === val) return;
-            cnAnswers[index] = val;
-            const optionEls = cnOptionsBox.querySelectorAll('.option');
-            optionEls.forEach(o => o.classList.remove('selected'));
-            el.classList.add('selected');
-            cnIsTransitioning = true;
-            setTimeout(() => {
-                if (index + 1 < cnTotalQ) cnRenderQuestion(index + 1);
-                else cnComputeResult();
-                cnIsTransitioning = false;
-            }, 260);
+       function cnHandleOptionClick(e) {
+    if (cnIsTransitioning) return;
+    const el = e.currentTarget;
+    const val = parseInt(el.dataset.val);
+    const index = cnCurrent;
+
+    // ✅ 允许重新选择同一个选项（去掉 return 拦截）
+    cnAnswers[index] = val;
+
+    const optionEls = cnOptionsBox.querySelectorAll('.option');
+    optionEls.forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+
+    cnIsTransitioning = true;
+    setTimeout(() => {
+        if (index + 1 < cnTotalQ) {
+            cnRenderQuestion(index + 1);
+        } else {
+            cnComputeResult();
         }
+        cnIsTransitioning = false;
+    }, 260);
+}
 
         cnPrevBtn.addEventListener('click', function() {
             if (cnIsTransitioning || cnCurrent === 0) return;
@@ -1170,26 +1176,52 @@
             }
         }
 
-        document.getElementById('shareBtnCn').addEventListener('click', function() {
-            const card = document.getElementById('shareCardCn');
-            this.textContent = '⏳ 生成中...';
-            this.disabled = true;
-            html2canvas(card, { scale: 2, backgroundColor: '#ffffff', useCORS: true, allowTaint: true, logging: false,
-                    width: card.scrollWidth, height: card.scrollHeight })
-                .then(canvas => {
-                    const link = document.createElement('a');
-                    const charName = document.getElementById('rCharCn').textContent || '津';
-                    link.download = `津字人格_${charName}.png`;
-                    link.href = canvas.toDataURL('image/png');
-                    link.click();
-                    this.textContent = '📸 保存分享卡片';
-                    this.disabled = false;
-                }).catch(err => {
-                    alert('生成失败，请截图保存：' + err.message);
-                    this.textContent = '📸 保存分享卡片';
-                    this.disabled = false;
+       document.getElementById('shareBtnCn').addEventListener('click', function() {
+    const card = document.getElementById('shareCardCn');
+    const btn = this;
+    btn.textContent = '⏳ 生成中...';
+    btn.disabled = true;
+
+    // 确保卡片完全可见
+    card.style.display = 'block';
+    card.style.opacity = '1';
+
+    html2canvas(card, {
+        scale: 2,
+        backgroundColor: '#ffffff',
+        useCORS: true,
+        allowTaint: true,
+        logging: false,
+        width: card.scrollWidth,
+        height: card.scrollHeight,
+        onclone: function(doc) {
+            // 等待所有图片加载完成
+            const imgs = doc.querySelectorAll('img');
+            return Promise.all(Array.from(imgs).map(img => {
+                if (img.complete) return Promise.resolve();
+                return new Promise(resolve => {
+                    img.onload = resolve;
+                    img.onerror = resolve;
+                    setTimeout(resolve, 3000);
                 });
-        });
+            }));
+        }
+    }).then(canvas => {
+        const link = document.createElement('a');
+        // 获取当前显示的字符
+        const charName = document.getElementById('resultCharCn').textContent || '津';
+        link.download = `津字人格_${charName}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        btn.textContent = '📸 保存分享卡片';
+        btn.disabled = false;
+    }).catch(err => {
+        console.error('截图失败:', err);
+        alert('生成失败，请截图保存：' + err.message);
+        btn.textContent = '📸 保存分享卡片';
+        btn.disabled = false;
+    });
+});
 
         document.getElementById('backHomeCnBtn').addEventListener('click', function() {
             document.getElementById('cnPanel').classList.add('hidden');
