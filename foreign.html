@@ -1632,18 +1632,15 @@
         });
 
         // ===== 分享卡片 =====
-    document.getElementById('shareBtn').addEventListener('click', function() {
+document.getElementById('shareBtn').addEventListener('click', function() {
     const card = document.getElementById('shareCard');
     const btn = this;
-
-    // 如果已经生成过，直接提示长按
-    if (document.getElementById('shareImgDisplay')) {
-        alert('📱 请长按图片保存到相册');
-        return;
-    }
-
     btn.textContent = '⏳ 生成中...';
     btn.disabled = true;
+
+    // 移除之前生成的旧图片（如果有）
+    const oldImg = document.getElementById('generatedShareImg');
+    if (oldImg) oldImg.remove();
 
     html2canvas(card, {
         scale: 2,
@@ -1652,25 +1649,39 @@
         allowTaint: true,
         logging: false,
         width: card.scrollWidth,
-        height: card.scrollHeight
+        height: card.scrollHeight,
+        onclone: function(doc) {
+            const imgs = doc.querySelectorAll('img');
+            return Promise.all(Array.from(imgs).map(img => {
+                if (img.complete) return Promise.resolve();
+                return new Promise(resolve => {
+                    img.onload = resolve;
+                    img.onerror = resolve;
+                    setTimeout(resolve, 3000);
+                });
+            }));
+        }
     }).then(canvas => {
+        // ✅ 把图片显示在页面上
         const img = document.createElement('img');
-        img.id = 'shareImgDisplay';
+        img.id = 'generatedShareImg';
         img.src = canvas.toDataURL('image/png');
         img.style.width = '100%';
         img.style.borderRadius = '16px';
         img.style.marginTop = '16px';
-        img.style.border = '3px solid #c0392b';
-
+        img.style.border = '2px solid #f0ede8';
+        img.style.boxShadow = '0 4px 16px rgba(0,0,0,0.08)';
+        
+        // 在按钮前面插入图片
         const shareBtn = document.getElementById('shareBtn');
         shareBtn.parentNode.insertBefore(img, shareBtn);
-
-        btn.textContent = '📸 已生成 ✓ 长按保存';
+        
+        btn.textContent = '📸 重新生成';
         btn.disabled = false;
-
-        alert('✅ 图片已生成！\n\n📱 请长按图片保存到相册');
+        alert('✅ 图片已生成！请长按图片保存到手机 📱');
     }).catch(err => {
-        alert('生成失败，请重试');
+        console.error('截图失败:', err);
+        alert('生成失败，请截图保存：' + err.message);
         btn.textContent = '📸 保存分享卡片';
         btn.disabled = false;
     });
