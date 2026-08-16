@@ -1662,10 +1662,31 @@ document.getElementById('shareBtn').addEventListener('click', function() {
             }));
         }
     }).then(canvas => {
-        // ✅ 把图片显示在页面上
+        // ===== 添加白边 =====
+        const padding = 20; // 白边宽度（像素）
+        const scale = 2; // 保持2倍清晰度
+        
+        // 创建一个更大的 canvas
+        const paddedCanvas = document.createElement('canvas');
+        const ctx = paddedCanvas.getContext('2d');
+        
+        // 新 canvas 的尺寸 = 原图尺寸 + 2倍白边
+        const newWidth = canvas.width + padding * 2;
+        const newHeight = canvas.height + padding * 2;
+        paddedCanvas.width = newWidth;
+        paddedCanvas.height = newHeight;
+        
+        // 填充白色背景
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, newWidth, newHeight);
+        
+        // 把原图居中绘制到新 canvas 上
+        ctx.drawImage(canvas, padding, padding);
+        
+        // ✅ 把带白边的图片显示在页面上
         const img = document.createElement('img');
         img.id = 'generatedShareImg';
-        img.src = canvas.toDataURL('image/png');
+        img.src = paddedCanvas.toDataURL('image/png');
         img.style.width = '100%';
         img.style.borderRadius = '16px';
         img.style.marginTop = '16px';
@@ -1686,7 +1707,6 @@ document.getElementById('shareBtn').addEventListener('click', function() {
         btn.disabled = false;
     });
 });
-
         // ===== 补报缓存 =====
         async function retryFailedReports() {
             if (!(await ensureCloudReady())) return;
