@@ -1635,6 +1635,13 @@
     document.getElementById('shareBtn').addEventListener('click', function() {
     const card = document.getElementById('shareCard');
     const btn = this;
+
+    // 如果已经生成过，直接提示长按
+    if (document.getElementById('shareImgDisplay')) {
+        alert('📱 请长按图片保存到相册');
+        return;
+    }
+
     btn.textContent = '⏳ 生成中...';
     btn.disabled = true;
 
@@ -1645,32 +1652,25 @@
         allowTaint: true,
         logging: false,
         width: card.scrollWidth,
-        height: card.scrollHeight,
-        onclone: function(doc) {
-            const imgs = doc.querySelectorAll('img');
-            return Promise.all(Array.from(imgs).map(img => {
-                if (img.complete) return Promise.resolve();
-                return new Promise(resolve => {
-                    img.onload = resolve;
-                    img.onerror = resolve;
-                    setTimeout(resolve, 3000);
-                });
-            }));
-        }
+        height: card.scrollHeight
     }).then(canvas => {
-        const link = document.createElement('a');
-        const charName = document.getElementById('resultCharDisplay').textContent || '津';
-        link.download = `TianjinCharacter_${charName}.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-        btn.textContent = '📸 保存分享卡片';
+        const img = document.createElement('img');
+        img.id = 'shareImgDisplay';
+        img.src = canvas.toDataURL('image/png');
+        img.style.width = '100%';
+        img.style.borderRadius = '16px';
+        img.style.marginTop = '16px';
+        img.style.border = '3px solid #c0392b';
+
+        const shareBtn = document.getElementById('shareBtn');
+        shareBtn.parentNode.insertBefore(img, shareBtn);
+
+        btn.textContent = '📸 已生成 ✓ 长按保存';
         btn.disabled = false;
-        
-        // ✅ 弹窗提示用户保存方式
-        alert('💡 图片已生成！\n\n📱 在微信中：请长按图片保存到相册\n🌐 在浏览器中：已自动下载');
+
+        alert('✅ 图片已生成！\n\n📱 请长按图片保存到相册');
     }).catch(err => {
-        console.error('截图失败:', err);
-        alert('生成失败，请截图保存：' + err.message);
+        alert('生成失败，请重试');
         btn.textContent = '📸 保存分享卡片';
         btn.disabled = false;
     });
