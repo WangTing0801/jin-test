@@ -1632,15 +1632,11 @@
         });
 
         // ===== 分享卡片 =====
-       document.getElementById('shareBtn').addEventListener('click', function() {
+    document.getElementById('shareBtn').addEventListener('click', function() {
     const card = document.getElementById('shareCard');
     const btn = this;
-    btn.textContent = '⏳ Generating...';
+    btn.textContent = '⏳ 生成中...';
     btn.disabled = true;
-
-    // 确保卡片完全可见
-    card.style.display = 'block';
-    card.style.opacity = '1';
 
     html2canvas(card, {
         scale: 2,
@@ -1651,31 +1647,31 @@
         width: card.scrollWidth,
         height: card.scrollHeight,
         onclone: function(doc) {
-            // 等待所有图片加载完成
             const imgs = doc.querySelectorAll('img');
             return Promise.all(Array.from(imgs).map(img => {
                 if (img.complete) return Promise.resolve();
                 return new Promise(resolve => {
                     img.onload = resolve;
                     img.onerror = resolve;
-                    // 如果图片加载超时，也继续
                     setTimeout(resolve, 3000);
                 });
             }));
         }
     }).then(canvas => {
         const link = document.createElement('a');
-        // 获取当前显示的字符
         const charName = document.getElementById('resultCharDisplay').textContent || '津';
         link.download = `TianjinCharacter_${charName}.png`;
         link.href = canvas.toDataURL('image/png');
         link.click();
-        btn.textContent = '📸 Save Share Card';
+        btn.textContent = '📸 保存分享卡片';
         btn.disabled = false;
+        
+        // ✅ 弹窗提示用户保存方式
+        alert('💡 图片已生成！\n\n📱 在微信中：请长按图片保存到相册\n🌐 在浏览器中：已自动下载');
     }).catch(err => {
         console.error('截图失败:', err);
         alert('生成失败，请截图保存：' + err.message);
-        btn.textContent = '📸 Save Share Card';
+        btn.textContent = '📸 保存分享卡片';
         btn.disabled = false;
     });
 });
